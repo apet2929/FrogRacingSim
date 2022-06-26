@@ -1,0 +1,21 @@
+Frog Dating Sim:
+
+
+You are a frog racer
+You race for money and success and fame and the ladies
+You wear a fedora.
+You give the ladies a lily on a lilypad.
+
+Gameplay:
+    - top down 2d rpg overworld
+        - talk to da ladies
+        - pre-scripted cutscenes
+        - pick up items like clothes to make you look cool
+        - pre-date chatter
+
+    - action state
+        - Racing
+        - You have a bunch of opponent frogs (I would have to make AI which would be challenging)
+        - You move horizontally slowly
+        - You can jump really high
+        - You can swing from branch to branch with your tongue
