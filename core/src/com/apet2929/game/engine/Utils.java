@@ -3,6 +3,8 @@ package com.apet2929.game.engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class Utils {
 
@@ -35,5 +37,27 @@ public class Utils {
 
     public static int clamp(int value, int min, int max){
         return Math.max(min, Math.min(max, value));
+    }
+
+
+    public static Body createRectBody(World world, float x, float y, float width, float height){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(x, y);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width, height);
+        return createBody(world, bodyDef, shape);
+
+    }
+    public static Body createBody(World world, BodyDef bodyDef, FixtureDef fixtureDef){
+        // Create our body in the world using our body definition
+        Body body = world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        return body;
+    }
+
+    public static Body createBody(World world, BodyDef bodyDef, Shape shape){
+        Body body = world.createBody(bodyDef);
+        body.createFixture(shape, 0.0f);
+        return body;
     }
 }

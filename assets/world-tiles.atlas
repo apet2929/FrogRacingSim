@@ -1,0 +1,24 @@
+world-tiles.png
+	size: 8192, 2048
+	repeat: none
+brick1
+	bounds: 0, 0, 1024, 1024
+brick2
+	bounds: 1024, 0, 1024, 1024
+clover
+	bounds: 2048, 0, 1024, 1024
+concrete
+	bounds: 3072, 0, 1024, 1024
+concrete2
+	bounds: 4096, 0, 1024, 1024
+grass1
+	bounds: 5120, 0, 1024, 1024
+rock01
+	bounds: 6144, 0, 1024, 1024
+rock02
+	bounds: 7168, 0, 1024, 1024
+rock02
+	index: 2
+	bounds: 0, 1024, 1024, 1024
+rock03
+	bounds: 1024, 1024, 1024, 1024

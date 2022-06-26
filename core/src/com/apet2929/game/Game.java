@@ -2,10 +2,8 @@ package com.apet2929.game;
 
 import com.apet2929.game.engine.states.Box2DTestState;
 import com.apet2929.game.engine.states.GameStateManager;
-import com.apet2929.game.engine.states.TestState;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +15,7 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		new AssetManager();
 		sb = new SpriteBatch();
 		gsm = new GameStateManager(new OrthographicCamera(), sb);
 		img = new Texture("badlogic.jpg");
