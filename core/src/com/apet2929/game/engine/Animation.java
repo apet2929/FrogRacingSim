@@ -23,6 +23,13 @@ public class Animation {
         frame = 0;
     }
 
+    public Animation(TextureRegion[] frames, float cycleTime){
+        this.frames = new Array<>(frames);
+        maxFrameTime = cycleTime / frames.length;
+        frameCount = frames.length;
+        frame = 0;
+    }
+
     public void update(float deltaTime){
         currentFrameTime += deltaTime;
         if(currentFrameTime > maxFrameTime){
@@ -43,7 +50,7 @@ public class Animation {
     }
 
     public void dispose(){
-        source.getTexture().dispose();
+        if(source != null) source.getTexture().dispose();
     }
 
 }

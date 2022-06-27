@@ -1,5 +1,6 @@
 package com.apet2929.game.engine.level;
 
+import com.apet2929.game.engine.box2d.entity.Entity;
 import com.apet2929.game.engine.box2d.entity.EntityLoader;
 import com.apet2929.game.engine.box2d.entity.EntityType;
 import com.apet2929.game.engine.box2d.entity.Wall;
@@ -33,7 +34,8 @@ public class LevelLoader {
                 if(typeOrdinal == -1) continue;
 
                 int y = tiles.length - (row + 1);
-                EntityLoader.LoadFromType(level.world, typeOrdinal, col * TILE_SIZE * 2, y * TILE_SIZE * 2);
+                Entity entity = EntityLoader.LoadFromType(level, typeOrdinal, col * TILE_SIZE, y * TILE_SIZE);
+                level.entities.add(entity);
             }
         }
         return level;
@@ -45,7 +47,8 @@ public class LevelLoader {
                 TiledMapTileLayer.Cell cell = layer.getCell(col, row);
                 if (cell == null) continue;
                 if (cell.getTile() == null) continue;
-                EntityLoader.LoadFromType(level.world, EntityType.WALL, col * TILE_SIZE, row * TILE_SIZE);
+                Entity entity = EntityLoader.LoadFromType(level, EntityType.WALL, col * TILE_SIZE, row * TILE_SIZE);
+                level.entities.add(entity);
             }
         }
     }

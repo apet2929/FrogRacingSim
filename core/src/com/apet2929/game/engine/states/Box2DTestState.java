@@ -42,26 +42,12 @@ public class Box2DTestState extends State {
     @Override
     public void update(float delta) {
         stage.act(delta);
-        ball.getBody().applyForce(100.0f, 0.0f, ball.getBody().getPosition().x, ball.getBody().getPosition().y, true);
+//        ball.getBody().applyForce(100.0f, 0.0f, ball.getBody().getPosition().x, ball.getBody().getPosition().y, true);
 
-        level.getWorld().step(delta, 6, 2);
+        level.update(delta);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             System.out.println("viewport.getCamera().position = " + viewport.getCamera().position);
-        }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            System.out.println("delta = " + delta);
-            viewport.getCamera().position.add(0,100f*delta,0);
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            viewport.getCamera().position.add(0, -100f*delta, 0);
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            viewport.getCamera().position.add(100f*delta,0, 0);
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            viewport.getCamera().position.add(-100f*delta,0, 0);
         }
         viewport.getCamera().update();
 
@@ -72,10 +58,9 @@ public class Box2DTestState extends State {
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         sb.setProjectionMatrix(viewport.getCamera().combined);
-//        sb.begin();
-//        ball.render(sb);
-//        sb.end();
-
+        sb.begin();
+        level.render(sb);
+        sb.end();
         debugRenderer.render(level.getWorld(), viewport.getCamera().combined);
 //        stage.draw();
     }
@@ -98,15 +83,12 @@ public class Box2DTestState extends State {
     void initWorld(){
         int[][] tiles =
         {
-                {-1,-1,-1,-1},
+                {2,1,-1,-1},
                 {-1,-1,-1,-1},
                 {-1,-1,-1,-1},
                 {0,0,0,0,0,0,0,0,0,0,0,0}
         };
         this.level = LevelLoader.Load(tiles);
-
-//        new Wall(world, 0, -25, VIEWPORT_SIZE, 20f);
-        ball = new Ball(level.getWorld(), 0, 50);
     }
 
     void initUI(){
@@ -124,6 +106,7 @@ public class Box2DTestState extends State {
         textButton.setScale(10);
 //        TextButton.TextButtonStyle style = textButton.getStyle();
 //        textButton.setStyle(textButton.getStyle());
+        textButton.getStyle().font.getData().scale(2);
 
         root.add(textButton).top().center().spaceBottom(50).width(300).height(200);
 

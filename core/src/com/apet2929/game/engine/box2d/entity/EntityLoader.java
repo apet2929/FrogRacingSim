@@ -1,20 +1,29 @@
 package com.apet2929.game.engine.box2d.entity;
 
-import com.badlogic.gdx.physics.box2d.World;
+import com.apet2929.game.engine.level.Level;
 
 import static com.apet2929.game.engine.Utils.TILE_SIZE;
 
 public class EntityLoader {
-    public static Entity LoadFromType(World world, int typeOrdinal, float x, float y){
+    public static Entity LoadFromType(Level level, int typeOrdinal, float x, float y){
         EntityType type = EntityType.values()[typeOrdinal];
-        return LoadFromType(world, type, x, y);
+        return LoadFromType(level, type, x, y);
     }
 
 
-    public static Entity LoadFromType(World world, EntityType type, float x, float y){
+    public static Entity LoadFromType(Level level, EntityType type, float x, float y){
         switch(type){
             case WALL: {
-                return new Wall(world, x, y, TILE_SIZE, TILE_SIZE);
+                return new Wall(level.getWorld(), x, y, TILE_SIZE, TILE_SIZE);
+            }
+            case FROG: {
+                Frog frog = new Frog(level.getWorld(), x, y);
+                frog.initCollisionListener(level);
+                return frog;
+
+            }
+            case BALL: {
+                return new Ball(level.getWorld(), x, y);
             }
 
             default:

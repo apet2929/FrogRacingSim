@@ -28,6 +28,10 @@ public class StateMachine {
         current.update(delta);
     }
 
+    public EntityState get(String name){
+        return this.states.get(name).create();
+    }
+
     public EntityState getCurrent(){
         return current;
     }

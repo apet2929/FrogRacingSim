@@ -1,9 +1,9 @@
 package com.apet2929.game.engine;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Utils {
@@ -12,6 +12,8 @@ public class Utils {
     public static final float TILE_SIZE = 10;
 
     public static final float PPM = VIEWPORT_SIZE / TILE_SIZE;
+
+    public static final int[] WASD = new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D};
 
     public static void clearScreen(){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
