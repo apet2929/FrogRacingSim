@@ -8,12 +8,10 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.Objects;
-
 import static com.apet2929.game.engine.Utils.TILE_SIZE;
 import static com.apet2929.game.engine.Utils.createBody;
 
-public class Ball extends Entity {
+public class Ball extends SmartEntity {
     public Ball(World world, float x, float y){
         super();
 

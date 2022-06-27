@@ -22,10 +22,6 @@ public abstract class Entity{
      */
     public abstract void initAssets();
 
-    public void update(float delta){
-
-    }
-
     public void render(SpriteBatch sb){
         sprite.setCenter(body.getPosition().x, body.getPosition().y);
         sprite.draw(sb);
