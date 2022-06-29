@@ -9,7 +9,15 @@ import com.badlogic.gdx.physics.box2d.*;
 public class Utils {
 
     public static final int VIEWPORT_SIZE = 100;
-    public static final float TILE_SIZE = 10;
+    public static final float TILE_SIZE = 5;
+    public static final float WORLD_SCALE = TILE_SIZE / VIEWPORT_SIZE;
+//    Forces
+    public static final float WALKING_FORCE = 12000 * WORLD_SCALE;
+    public static final float JUMPING_FORCE = 24000 * WORLD_SCALE;
+    public static final float GRAPPLE_FORCE = 11000 * WORLD_SCALE;
+    public static final float DRAG_FORCE = 600 * WORLD_SCALE;
+
+    public static final float MAX_GRAPPLE_LENGTH = TILE_SIZE * 10;
 
     public static final float PPM = VIEWPORT_SIZE / TILE_SIZE;
 

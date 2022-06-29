@@ -5,6 +5,7 @@ import com.apet2929.game.engine.box2d.entity.SmartEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+import static com.apet2929.game.engine.Utils.JUMPING_FORCE;
 import static com.apet2929.game.engine.Utils.clamp;
 
 public class FrogJumpChargingState extends FrogState{
@@ -35,8 +36,8 @@ public class FrogJumpChargingState extends FrogState{
     }
 
     void jump(){
-        float force = clamp(elapsedTime, 0.3f, 1.0f);
-        FrogJumpingState.jump(frog, force * FrogJumpingState.JUMPING_FORCE);
+        float force_percent = clamp(elapsedTime, 0.3f, 1.0f);
+        FrogJumpingState.jump(frog, force_percent * JUMPING_FORCE);
     }
 
 }

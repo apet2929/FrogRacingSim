@@ -9,7 +9,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
@@ -31,12 +33,16 @@ public class Box2DTestState extends State {
     Box2DDebugRenderer debugRenderer;
 
     Label canJumpLabel;
+
+//    Temporary
+    ShapeRenderer sr;
     public Box2DTestState(GameStateManager gsm) {
         super(gsm);
         viewport = new FitViewport(VIEWPORT_SIZE, VIEWPORT_SIZE);
         viewport.getCamera().position.set(35, 40, 0);
         viewport.getCamera().update();
         stageViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        sr = new ShapeRenderer();
         this.debugRenderer = new Box2DDebugRenderer();
         initWorld();
         initUI();
@@ -53,7 +59,8 @@ public class Box2DTestState extends State {
             System.out.println("frog.canJump() = " + frog.canJump());
             System.out.println("frog.getNumFootContacts() = " + frog.getNumFootContacts());
         }
-        viewport.getCamera().update();
+
+        updateCamera();
 
     }
 
@@ -65,6 +72,12 @@ public class Box2DTestState extends State {
         sb.begin();
         level.render(sb);
         sb.end();
+
+        sr.setProjectionMatrix(viewport.getCamera().combined);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        frog.drawTongue(sr);
+        sr.end();
+
         debugRenderer.render(level.getWorld(), viewport.getCamera().combined);
         drawUI();
     }
@@ -86,13 +99,20 @@ public class Box2DTestState extends State {
         stageViewport.update(width, height);
     }
 
+    void updateCamera(){
+        viewport.getCamera().position.lerp(new Vector3(frog.getPosition(), viewport.getCamera().position.z), 0.1f);
+        viewport.getCamera().update();
+    }
+
     void initWorld(){
         int[][] tiles =
         {
-                {2,1,-1,-1},
-                {-1,-1,-1,-1},
-                {-1,-1,-1,-1},
-                {0,0,0,0,0,0,0,0,0,0,0,0}
+                {2,-1,-1,-1,-1,-1,-1,-1},
+                {-1,-1,-1,-1,-1,-1,-1,0, -1,-1,-1,-1,-1,0},
+                {-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,0},
+                {-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,0},
+                {-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,0},
+                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
         };
         this.level = LevelLoader.Load(tiles);
         frog = this.level.getFrogs().get(0);

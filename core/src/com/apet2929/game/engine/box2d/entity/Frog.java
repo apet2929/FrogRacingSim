@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -20,22 +21,25 @@ import java.util.HashMap;
 
 import static com.apet2929.game.engine.Utils.TILE_SIZE;
 
-
 public class Frog extends SmartEntity {
     public static final String IDLE = "idle";
     public static final String JUMPING = "jump";
     public static final String WALKING = "walking";
     public static final String JUMP_CHARGING = "jump_charging";
+    public static final String GRAPPLE = "grapple";
 
     public static float BODY_WIDTH = 0.7f * TILE_SIZE * 2;
     public static float BODY_HEIGHT = 0.5f * TILE_SIZE * 2;
     private int numFootContacts;
+    private Direction direction;
+
     public Frog(World world, float x, float y) {
         super(EntityType.FROG);
         initBody(world, x, y);
         this.sprite = new Sprite(this.currentAnimation.getFrame());
         this.sprite.setSize(BODY_WIDTH, BODY_HEIGHT);
         numFootContacts = 0;
+        this.direction = Direction.RIGHT;
     }
 
     public void initCollisionListener(Level level){
@@ -116,6 +120,7 @@ public class Frog extends SmartEntity {
         states.put(WALKING, () -> new FrogWalkingState(this));
         states.put(JUMPING, () -> new FrogJumpingState(this));
         states.put(JUMP_CHARGING, () -> new FrogJumpChargingState(this));
+        states.put(GRAPPLE, () -> new FrogGrappleState(this));
         this.stateMachine = new StateMachine(states);
         this.changeState(IDLE);
     }
@@ -141,18 +146,6 @@ public class Frog extends SmartEntity {
         footFixture.setUserData("foot");
     }
 
-    void onWallCollision(){
-
-        String stateId = getState();
-        if(stateId.equals(JUMPING)){
-            System.out.println("Touched the ground!");
-            if(shouldWalk()){
-                changeState(WALKING);
-            } else{
-                changeState(IDLE);
-            }
-        }
-    }
 
     public static boolean shouldWalk(){
         return Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D);
@@ -162,5 +155,19 @@ public class Frog extends SmartEntity {
     public void changeState(String name) {
         super.changeState(name);
         System.out.println("Changing state! " + this.getState() + " -> " + name);
+    }
+
+    public void drawTongue(ShapeRenderer sr){
+        if(getState().equals(GRAPPLE)){
+            ((FrogGrappleState)stateMachine.getCurrent()).drawTongue(sr);
+        }
+    }
+
+    public Direction getDirection(){
+        return this.direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

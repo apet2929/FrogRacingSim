@@ -5,9 +5,6 @@ import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.SmartEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector2;
-
-import static com.apet2929.game.engine.box2d.entity.states.FrogWalkingState.WALKING_FORCE;
 
 public class FrogIdleState extends FrogState{
     public FrogIdleState(SmartEntity entity) {
@@ -22,10 +19,12 @@ public class FrogIdleState extends FrogState{
         else if(Gdx.input.isKeyPressed(Input.Keys.A)){
 //            frog.applyImpulseToCenter(Direction.LEFT.getVector(), WALKING_FORCE);
             walk();
+            frog.setDirection(Direction.LEFT);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
 //            frog.applyImpulseToCenter(Direction.RIGHT.getVector(), WALKING_FORCE);
             walk();
+            frog.setDirection(Direction.RIGHT);
         }
         else if(frog.getNumFootContacts() == 0){
             frog.changeState(Frog.JUMPING);

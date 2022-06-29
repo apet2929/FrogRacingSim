@@ -7,11 +7,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
-import static com.apet2929.game.engine.box2d.entity.states.FrogWalkingState.WALKING_FORCE;
+import static com.apet2929.game.engine.Utils.DRAG_FORCE;
+import static com.apet2929.game.engine.Utils.WALKING_FORCE;
+
 
 public class FrogJumpingState extends FrogState {
-    public static final float JUMPING_FORCE = 6000;
-    public static final float DRAG_FORCE = 150;
 
     public FrogJumpingState(SmartEntity entity) {
         super(entity, Frog.JUMPING);
@@ -25,6 +25,9 @@ public class FrogJumpingState extends FrogState {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
             frog.applyForceToCenter(Direction.RIGHT.getVector(), WALKING_FORCE /4f);
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            frog.changeState(Frog.GRAPPLE);
         }
 
         if(frog.getNumFootContacts() > 0){

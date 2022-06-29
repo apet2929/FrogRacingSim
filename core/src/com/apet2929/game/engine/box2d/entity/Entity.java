@@ -43,7 +43,7 @@ public abstract class Entity{
     }
 
     public void applyForceToCenter(Vector2 direction, float magnitude){
-        this.body.applyForceToCenter(direction.scl(magnitude), true);
+        this.body.applyForceToCenter(direction.cpy().scl(magnitude), true);
     }
 
     public void applyImpulseToCenter(Vector2 direction, float magnitude){

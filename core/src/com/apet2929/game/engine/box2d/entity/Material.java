@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 public enum Material {
     STEEL(1f, 0.5f, 0.1f),
     GROUND(1f, 0.5f, 0.1f),
-    WOOD(0.5f, 0.7f, 0.3f),
+    WOOD(0.5f, 0.1f, 0.3f),
     RUBBER(1f, 0f, 1f),
     STONE(7f, 0.5f, 0.3f);
 
