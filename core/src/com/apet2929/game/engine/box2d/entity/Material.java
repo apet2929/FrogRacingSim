@@ -4,7 +4,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 
 public enum Material {
-    STEEL(1f, 0.3f, 0.1f),
+    STEEL(1f, 0.5f, 0.1f),
+    GROUND(1f, 0.5f, 0.1f),
     WOOD(0.5f, 0.7f, 0.3f),
     RUBBER(1f, 0f, 1f),
     STONE(7f, 0.5f, 0.3f);

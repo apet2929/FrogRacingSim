@@ -108,16 +108,16 @@ public class Box2DTestState extends State {
         root.setSize(stage.getWidth(), stage.getHeight());
 
         root.defaults().pad(10);
-
-        TextButton textButton = new TextButton("How to Play", skin);
-        textButton.setScale(10);
-//        TextButton.TextButtonStyle style = textButton.getStyle();
-//        textButton.setStyle(textButton.getStyle());
-        textButton.getStyle().font.getData().scale(1.3f);
-
-        root.add(textButton).top().center().spaceBottom(50).width(300).height(200);
-
-        root.row();
+//
+//        TextButton textButton = new TextButton("How to Play", skin);
+//        textButton.setScale(10);
+////        TextButton.TextButtonStyle style = textButton.getStyle();
+////        textButton.setStyle(textButton.getStyle());
+//        textButton.getStyle().font.getData().scale(1.3f);
+//
+//        root.add(textButton).top().center().spaceBottom(50).width(300).height(200);
+//
+//        root.row();
 
         canJumpLabel = new Label("Can frog jump? false", skin);
         canJumpLabel.setAlignment(Align.center);

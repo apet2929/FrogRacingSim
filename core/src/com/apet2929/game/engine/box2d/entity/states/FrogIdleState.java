@@ -9,24 +9,22 @@ import com.badlogic.gdx.math.Vector2;
 
 import static com.apet2929.game.engine.box2d.entity.states.FrogWalkingState.WALKING_FORCE;
 
-public class FrogIdleState extends EntityState{
+public class FrogIdleState extends FrogState{
     public FrogIdleState(SmartEntity entity) {
         super(entity, Frog.IDLE);
     }
 
     @Override
     public void update(float delta) {
-        Frog frog = (Frog) this.entity;
-
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && frog.canJump()){
-            FrogJumpingState.jump(frog);
+            frog.changeState(Frog.JUMP_CHARGING);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            frog.applyImpulseToCenter(Direction.LEFT.getVector(), WALKING_FORCE);
+//            frog.applyImpulseToCenter(Direction.LEFT.getVector(), WALKING_FORCE);
             walk();
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            frog.applyImpulseToCenter(Direction.RIGHT.getVector(), WALKING_FORCE);
+//            frog.applyImpulseToCenter(Direction.RIGHT.getVector(), WALKING_FORCE);
             walk();
         }
         else if(frog.getNumFootContacts() == 0){

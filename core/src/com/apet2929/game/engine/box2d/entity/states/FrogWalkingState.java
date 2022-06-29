@@ -7,8 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
-public class FrogWalkingState extends EntityState{
-    public static final float WALKING_FORCE = 5000;
+public class FrogWalkingState extends FrogState{
+    public static final float WALKING_FORCE = 3000;
     public FrogWalkingState(SmartEntity entity) {
         super(entity, Frog.WALKING);
     }
@@ -18,7 +18,7 @@ public class FrogWalkingState extends EntityState{
         super.update(delta);
         Frog frog = (Frog) this.entity;
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && frog.canJump()){
-            FrogJumpingState.jump(frog);
+            frog.changeState(Frog.JUMP_CHARGING);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A)){
             frog.applyForceToCenter(Direction.LEFT.getVector(), WALKING_FORCE);

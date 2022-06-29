@@ -19,12 +19,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.HashMap;
 
 import static com.apet2929.game.engine.Utils.TILE_SIZE;
-import static com.apet2929.game.engine.Utils.WASD;
+
 
 public class Frog extends SmartEntity {
     public static final String IDLE = "idle";
     public static final String JUMPING = "jump";
     public static final String WALKING = "walking";
+    public static final String JUMP_CHARGING = "jump_charging";
+
     public static float BODY_WIDTH = 0.7f * TILE_SIZE * 2;
     public static float BODY_HEIGHT = 0.5f * TILE_SIZE * 2;
     private int numFootContacts;
@@ -113,6 +115,7 @@ public class Frog extends SmartEntity {
         states.put(IDLE, () -> new FrogIdleState(this));
         states.put(WALKING, () -> new FrogWalkingState(this));
         states.put(JUMPING, () -> new FrogJumpingState(this));
+        states.put(JUMP_CHARGING, () -> new FrogJumpChargingState(this));
         this.stateMachine = new StateMachine(states);
         this.changeState(IDLE);
     }
@@ -127,7 +130,7 @@ public class Frog extends SmartEntity {
 
     void initBody(World world, float x, float y){
         BodyFactory factory = BodyFactory.getInstance(world);
-        this.body = factory.makeRectBody(x, y, BODY_WIDTH, BODY_HEIGHT, Material.STEEL, BodyDef.BodyType.DynamicBody, false);
+        this.body = factory.makeRectBody(x, y, BODY_WIDTH, BODY_HEIGHT, Material.WOOD, BodyDef.BodyType.DynamicBody, true);
         this.body.getFixtureList().get(0).setUserData("frog");
         PolygonShape footFixtureShape = new PolygonShape();
         footFixtureShape.setAsBox(BODY_WIDTH/3f, BODY_HEIGHT/5, new Vector2(0, -BODY_HEIGHT/2f), 0);
