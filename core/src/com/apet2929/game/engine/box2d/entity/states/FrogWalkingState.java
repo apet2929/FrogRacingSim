@@ -8,7 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
 public class FrogWalkingState extends EntityState{
-    public static final float FORCE_MAG = 5000;
+    public static final float WALKING_FORCE = 5000;
     public FrogWalkingState(SmartEntity entity) {
         super(entity, Frog.WALKING);
     }
@@ -17,19 +17,22 @@ public class FrogWalkingState extends EntityState{
     public void update(float delta) {
         super.update(delta);
         Frog frog = (Frog) this.entity;
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            frog.applyForceToCenter(Direction.LEFT.getVector(), FORCE_MAG);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && frog.canJump()){
+            FrogJumpingState.jump(frog);
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            frog.applyForceToCenter(Direction.LEFT.getVector(), WALKING_FORCE);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            frog.applyForceToCenter(Direction.RIGHT.getVector(), FORCE_MAG);
+            frog.applyForceToCenter(Direction.RIGHT.getVector(), WALKING_FORCE);
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            this.entity.getBody().applyLinearImpulse(new Vector2(0, 1000), this.entity.getPosition(), true);
-            this.entity.changeState(Frog.JUMPING);
-
-        } else {
+        else if(frog.getNumFootContacts() == 0){
+            frog.changeState(Frog.JUMPING);
+        }
+        else {
             this.entity.changeState(Frog.IDLE);
         }
+
     }
 
     @Override

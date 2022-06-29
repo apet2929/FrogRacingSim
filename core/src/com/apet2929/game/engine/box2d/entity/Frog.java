@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.HashMap;
@@ -26,11 +27,13 @@ public class Frog extends SmartEntity {
     public static final String WALKING = "walking";
     public static float BODY_WIDTH = 0.7f * TILE_SIZE * 2;
     public static float BODY_HEIGHT = 0.5f * TILE_SIZE * 2;
+    private int numFootContacts;
     public Frog(World world, float x, float y) {
         super(EntityType.FROG);
         initBody(world, x, y);
         this.sprite = new Sprite(this.currentAnimation.getFrame());
         this.sprite.setSize(BODY_WIDTH, BODY_HEIGHT);
+        numFootContacts = 0;
     }
 
     public void initCollisionListener(Level level){
@@ -41,45 +44,42 @@ public class Frog extends SmartEntity {
                 Fixture frog;
                 Fixture other;
                 String otherID;
-                if(fA.getBody().equals(body)){
+                if(fA.getUserData().equals("foot")){
                     frog = fA;
                     other = fB;
-                    otherID = (String) other.getBody().getUserData();
-                } else if(fB.getBody().equals(body)){
+                    numFootContacts++;
+                } else if(fB.getUserData().equals("foot")){
                     frog = fB;
                     other = fA;
-                    otherID = (String) other.getBody().getUserData();
+                    numFootContacts++;
                 } else {
                     return;
                 }
+                otherID = (String) other.getBody().getFixtureList().get(0).getUserData();
                 if(otherID.equals("wall")){
-                    onWallCollision();
+
                 }
             }
 
             @Override
             public void end(Fixture fA, Fixture fB) {
+
                 Fixture frog;
                 Fixture other;
                 String otherID;
-                if(fA.getBody().equals(body)){
+                if(fA.getUserData().equals("foot")){
                     frog = fA;
                     other = fB;
-                    otherID = (String) other.getBody().getUserData();
-                } else if(fB.getBody().equals(body)){
+                    numFootContacts--;
+                } else if(fB.getUserData().equals("foot")){
                     frog = fB;
                     other = fA;
-                    otherID = (String) other.getBody().getUserData();
+                    numFootContacts--;
                 } else {
                     return;
                 }
+                otherID = (String) other.getBody().getFixtureList().get(0).getUserData();
                 if(otherID.equals("wall")){
-                    System.out.println("Stopped touching wall!");
-                    if(body.getLinearVelocity().y > 0){
-                        // just left the ground: bounce
-                        System.out.println("Bouncing!");
-                        changeState(JUMPING);
-                    }
                 }
             }
         });
@@ -105,7 +105,6 @@ public class Frog extends SmartEntity {
 
         Animation walkingAnimation = new Animation(frames, 1f);
         this.animations.put(WALKING, walkingAnimation);
-
     }
 
     @Override
@@ -118,13 +117,29 @@ public class Frog extends SmartEntity {
         this.changeState(IDLE);
     }
 
+    public int getNumFootContacts(){
+        return numFootContacts;
+    }
+
+    public boolean canJump() {
+        return numFootContacts > 0;
+    }
+
     void initBody(World world, float x, float y){
         BodyFactory factory = BodyFactory.getInstance(world);
         this.body = factory.makeRectBody(x, y, BODY_WIDTH, BODY_HEIGHT, Material.STEEL, BodyDef.BodyType.DynamicBody, false);
-        this.body.setUserData("frog");
+        this.body.getFixtureList().get(0).setUserData("frog");
+        PolygonShape footFixtureShape = new PolygonShape();
+        footFixtureShape.setAsBox(BODY_WIDTH/3f, BODY_HEIGHT/5, new Vector2(0, -BODY_HEIGHT/2f), 0);
+
+        Fixture footFixture = this.body.createFixture(footFixtureShape, 0.0f);
+
+        footFixture.setSensor(true);
+        footFixture.setUserData("foot");
     }
 
     void onWallCollision(){
+
         String stateId = getState();
         if(stateId.equals(JUMPING)){
             System.out.println("Touched the ground!");
@@ -140,4 +155,9 @@ public class Frog extends SmartEntity {
         return Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D);
     }
 
+    @Override
+    public void changeState(String name) {
+        super.changeState(name);
+        System.out.println("Changing state! " + this.getState() + " -> " + name);
+    }
 }

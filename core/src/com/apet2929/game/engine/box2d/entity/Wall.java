@@ -17,7 +17,7 @@ public class Wall extends Entity {
 
         BodyFactory factory = BodyFactory.getInstance(world);
         this.body = factory.makeRectBody(x, y, TILE_SIZE, TILE_SIZE, Material.STEEL, BodyDef.BodyType.StaticBody, true);
-        this.body.setUserData("wall");
+        this.setUserData("wall");
 
     }
 

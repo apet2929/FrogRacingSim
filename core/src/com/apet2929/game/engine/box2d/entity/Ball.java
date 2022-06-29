@@ -18,7 +18,7 @@ public class Ball extends SmartEntity {
 
         BodyFactory factory = BodyFactory.getInstance(world);
         this.body = factory.makeCircleBody(x, y, TILE_SIZE, Material.RUBBER, BodyDef.BodyType.DynamicBody, false);
-        this.body.setUserData("ball");
+        this.setUserData("ball");
     }
 
     @Override

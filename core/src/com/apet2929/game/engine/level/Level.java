@@ -3,6 +3,7 @@ package com.apet2929.game.engine.level;
 import com.apet2929.game.engine.box2d.CollisionHandler;
 import com.apet2929.game.engine.box2d.OnCollision;
 import com.apet2929.game.engine.box2d.entity.Entity;
+import com.apet2929.game.engine.box2d.entity.Frog;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -31,6 +32,14 @@ public class Level {
         entities.forEach((Entity entity) -> {
             entity.render(sb);
         });
+    }
+
+    public ArrayList<Frog> getFrogs() {
+        ArrayList<Frog> frogs = new ArrayList<>();
+        entities.forEach((Entity entity) -> {
+            if(entity.getBody().getFixtureList().get(0).getUserData().equals("frog")) frogs.add((Frog) (entity));
+        });
+        return frogs;
     }
 
     public World getWorld() {

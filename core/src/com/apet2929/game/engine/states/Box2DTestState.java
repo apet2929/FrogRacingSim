@@ -1,5 +1,6 @@
 package com.apet2929.game.engine.states;
 
+import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.Wall;
 import com.apet2929.game.engine.box2d.entity.Ball;
 import com.apet2929.game.engine.level.Level;
@@ -25,9 +26,11 @@ public class Box2DTestState extends State {
     Stage stage;
     Skin skin;
 
-    Ball ball;
+    Frog frog;
     Level level;
     Box2DDebugRenderer debugRenderer;
+
+    Label canJumpLabel;
     public Box2DTestState(GameStateManager gsm) {
         super(gsm);
         viewport = new FitViewport(VIEWPORT_SIZE, VIEWPORT_SIZE);
@@ -47,7 +50,8 @@ public class Box2DTestState extends State {
         level.update(delta);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            System.out.println("viewport.getCamera().position = " + viewport.getCamera().position);
+            System.out.println("frog.canJump() = " + frog.canJump());
+            System.out.println("frog.getNumFootContacts() = " + frog.getNumFootContacts());
         }
         viewport.getCamera().update();
 
@@ -62,11 +66,13 @@ public class Box2DTestState extends State {
         level.render(sb);
         sb.end();
         debugRenderer.render(level.getWorld(), viewport.getCamera().combined);
-//        stage.draw();
+        drawUI();
     }
 
     void drawUI(){
         stageViewport.apply();
+        canJumpLabel.setText("Can frog jump? " + frog.canJump());
+        canJumpLabel.validate();
         stage.draw();
     }
 
@@ -89,6 +95,7 @@ public class Box2DTestState extends State {
                 {0,0,0,0,0,0,0,0,0,0,0,0}
         };
         this.level = LevelLoader.Load(tiles);
+        frog = this.level.getFrogs().get(0);
     }
 
     void initUI(){
@@ -106,42 +113,17 @@ public class Box2DTestState extends State {
         textButton.setScale(10);
 //        TextButton.TextButtonStyle style = textButton.getStyle();
 //        textButton.setStyle(textButton.getStyle());
-        textButton.getStyle().font.getData().scale(2);
+        textButton.getStyle().font.getData().scale(1.3f);
 
         root.add(textButton).top().center().spaceBottom(50).width(300).height(200);
 
         root.row();
 
-//        Label label = new Label("You play as an underwater explorer, \n" +
-//                " navigating through the dangerous seas \n" +
-//                "in his trusty steam-powered ship. \n " +
-//                "To THRUST forward, press and hold space. \n" +
-//                "To rotate, press the \n" +
-//                "LEFT and RIGHT arrow keys. \n" +
-//                "To stop, press BACK. When you THRUST, you lose STEAM. \n" +
-//                "If you run out of STEAM, \n" +
-//                "it's GAME OVER. Thankfully, the seas \n " +
-//                "are filled with underwater volcanoes, which can \n " +
-//                "restore your STEAM. Hover over them to refill! \n" +
-//                "Try and avoid the fish, as you will lose \n " +
-//                "STEAM if you bump into them. \n " +
-//                "Can you find your way out of all 4 levels? \n " +
-//                "Good luck!", skin);
-
-        Label label = new Label("MOVE FORWARD->SPACE \n" +
-                "ROTATE->LEFT/RIGHT \n " +
-                "BRAKE->BACK \n " +
-                "AVOID FISH \n " +
-                "RESTORE STEAM \n IN VOLCANOES \n " +
-                "GET TO THE END"
-                , skin);
-        label.setAlignment(Align.center);
-        root.add(label).center();
-//        label.setColor(1, 0, 0, 1);
-        label.getStyle().fontColor = new Color(1, 0,0,1);
+        canJumpLabel = new Label("Can frog jump? false", skin);
+        canJumpLabel.setAlignment(Align.center);
+        root.add(canJumpLabel).bottom().right();
+//        canJumpLabel.setColor(1, 0, 0, 1);
+        canJumpLabel.getStyle().fontColor = new Color(1, 0,0,1);
     }
 
-    void reset(){
-        ball.getBody().setTransform(new Vector2(0, 50), 0);
-    }
 }
