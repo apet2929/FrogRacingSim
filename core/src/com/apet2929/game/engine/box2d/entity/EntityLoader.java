@@ -16,15 +16,10 @@ public class EntityLoader {
             case WALL: {
                 return new Wall(level.getWorld(), x, y, TILE_SIZE, TILE_SIZE);
             }
-            case FROG: {
-                Frog frog = new Frog(level.getWorld(), x, y);
-                frog.initCollisionListener(level);
-                return frog;
-
-            }
             case BALL: {
                 return new Ball(level.getWorld(), x, y);
             }
+
 
             default:
                 throw new IllegalArgumentException("EntityType of " + type.name() + " not supported!");

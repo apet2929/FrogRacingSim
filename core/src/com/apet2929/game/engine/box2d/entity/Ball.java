@@ -1,5 +1,6 @@
 package com.apet2929.game.engine.box2d.entity;
 
+import com.apet2929.game.AssetManager;
 import com.apet2929.game.engine.box2d.BodyFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +24,7 @@ public class Ball extends SmartEntity {
 
     @Override
     public void initAssets() {
-        this.sprite = new Sprite(new Texture(Gdx.files.internal("badlogic.jpg")));
+        this.sprite = new Sprite(AssetManager.getInstance().get("brick1"));
         sprite.setSize(TILE_SIZE, TILE_SIZE);
     }
 

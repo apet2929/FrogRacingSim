@@ -21,19 +21,8 @@ public class FrogWalkingState extends FrogState{
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && frog.canJump()){
             frog.changeState(Frog.JUMP_CHARGING);
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            frog.applyForceToCenter(Direction.LEFT.getVector(), WALKING_FORCE);
-            frog.setDirection(Direction.LEFT);
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            frog.applyForceToCenter(Direction.RIGHT.getVector(), WALKING_FORCE);
-            frog.setDirection(Direction.RIGHT);
-        }
         else if(frog.getNumFootContacts() == 0){
             frog.changeState(Frog.JUMPING);
-        }
-        else {
-            this.entity.changeState(Frog.IDLE);
         }
 
     }

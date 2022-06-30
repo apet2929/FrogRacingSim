@@ -2,6 +2,7 @@ package com.apet2929.game.engine.box2d.entity;
 
 import com.apet2929.game.AssetManager;
 import com.apet2929.game.engine.Animation;
+import com.apet2929.game.engine.Network;
 import com.apet2929.game.engine.box2d.BodyFactory;
 import com.apet2929.game.engine.box2d.OnCollision;
 import com.apet2929.game.engine.box2d.entity.states.*;
@@ -32,10 +33,12 @@ public class Frog extends SmartEntity {
     public static float BODY_HEIGHT = 0.5f * TILE_SIZE * 2;
     private int numFootContacts;
     private Direction direction;
+    private String id;
 
-    public Frog(World world, float x, float y) {
+    public Frog(Level level, float x, float y, String id) {
         super(EntityType.FROG);
-        initBody(world, x, y);
+        initBody(level.getWorld(), x, y);
+        initCollisionListener(level);
         this.sprite = new Sprite(this.currentAnimation.getFrame());
         this.sprite.setSize(BODY_WIDTH, BODY_HEIGHT);
         numFootContacts = 0;
@@ -169,5 +172,13 @@ public class Frog extends SmartEntity {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setPosition(Vector2 position){
+        this.body.setTransform(position, 0);
+    }
+
+    public void setID(String id){
+        this.id = id;
     }
 }

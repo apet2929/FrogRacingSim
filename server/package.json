@@ -1,0 +1,25 @@
+{
+  "name": "FrogDatingSim",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apet2929/FrogDatingSim.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apet2929/FrogDatingSim/issues"
+  },
+  "homepage": "https://github.com/apet2929/FrogDatingSim#readme",
+  "devDependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  },
+  "dependencies": {}
+}

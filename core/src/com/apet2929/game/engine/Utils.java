@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.physics.box2d.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Utils {
 
@@ -69,5 +72,36 @@ public class Utils {
         Body body = world.createBody(bodyDef);
         body.createFixture(shape, 0.0f);
         return body;
+    }
+
+    public static String getString(JSONObject object, String key){
+        try {
+            return object.getString(key);
+        } catch (JSONException e) {
+            Gdx.app.log("JSON", "Error getting string data with key: " + key);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Double getDouble(JSONObject object, String key){
+        try {
+            return object.getDouble(key);
+        } catch (JSONException e) {
+            Gdx.app.log("JSON", "Error getting double data with key: " + key);
+//            e.printStackTrace();
+            System.out.println("object = " + object);
+        }
+        return null;
+    }
+
+    public static JSONObject getArrayAt(JSONArray array, int index){
+        try {
+            return array.getJSONObject(index);
+        } catch (JSONException e) {
+            Gdx.app.log("JSON", "Error getting JSON object from array at index: " + index);
+            e.printStackTrace();
+        }
+        return null;
     }
 }

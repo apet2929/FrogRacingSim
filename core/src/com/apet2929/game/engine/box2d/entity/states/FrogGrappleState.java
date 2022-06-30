@@ -10,8 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import static com.apet2929.game.engine.Utils.*;
 
 public class FrogGrappleState extends FrogState{
-    Vector2 tonguePos;
-    Vector2 grapplePos;
+    public Vector2 tonguePos;
+    public Vector2 grapplePos;
 
     float closestFraction; // used in finding grapplePos
 
@@ -24,9 +24,6 @@ public class FrogGrappleState extends FrogState{
         updateTonguePos();
         pullToTarget();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            release();
-        }
     }
 
     @Override
@@ -47,7 +44,7 @@ public class FrogGrappleState extends FrogState{
         super.onExit();
     }
 
-    Vector2 updateTonguePos(){
+    public Vector2 updateTonguePos(){
         tonguePos = new Vector2(frog.getPosition().x + Frog.BODY_WIDTH*0.7f, frog.getPosition().y);
         return tonguePos;
     }
@@ -58,16 +55,15 @@ public class FrogGrappleState extends FrogState{
         sr.rectLine(tonguePos, grapplePos, 3);
     }
 
-    void release(){
+    public void release(){
         if(frog.getNumFootContacts() > 0){
-            if(Frog.shouldWalk()) frog.changeState(Frog.WALKING);
-            else frog.changeState(Frog.IDLE);
+            frog.changeState(Frog.IDLE);
         } else {
             frog.changeState(Frog.JUMPING);
         }
     }
 
-    void pullToTarget(){
+    public void pullToTarget(){
         Vector2 direction = new Vector2(grapplePos.x - tonguePos.x, grapplePos.y - tonguePos.y).nor();
 
         frog.applyForceToCenter(direction, GRAPPLE_FORCE);
@@ -78,7 +74,7 @@ public class FrogGrappleState extends FrogState{
         }
     }
 
-    void initGrapplePos() {
+    public void initGrapplePos() {
         Vector2 pos = this.frog.getPosition();
         float grappleTargetX = frog.getDirection().getVector().x * MAX_GRAPPLE_LENGTH;
 

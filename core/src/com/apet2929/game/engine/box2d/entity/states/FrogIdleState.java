@@ -13,20 +13,7 @@ public class FrogIdleState extends FrogState{
 
     @Override
     public void update(float delta) {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && frog.canJump()){
-            frog.changeState(Frog.JUMP_CHARGING);
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.A)){
-//            frog.applyImpulseToCenter(Direction.LEFT.getVector(), WALKING_FORCE);
-            walk();
-            frog.setDirection(Direction.LEFT);
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-//            frog.applyImpulseToCenter(Direction.RIGHT.getVector(), WALKING_FORCE);
-            walk();
-            frog.setDirection(Direction.RIGHT);
-        }
-        else if(frog.getNumFootContacts() == 0){
+        if(frog.getNumFootContacts() == 0){
             frog.changeState(Frog.JUMPING);
         }
 
@@ -41,7 +28,8 @@ public class FrogIdleState extends FrogState{
     public void onExit() {
 
     }
-    void walk(){
+
+    public void walk(){
         this.entity.changeState(Frog.WALKING);
     }
 }

@@ -78,9 +78,10 @@ public class GameStateManager  {
     }
 
     public void render(){
-        for (State state : states) {
-            state.draw(sb);
-        }
+        states.peek().draw(sb);
+//        for (State state : states) {
+//            state.draw(sb);
+//        }
 
     }
 
@@ -102,7 +103,14 @@ public class GameStateManager  {
         states.forEach((State state) -> state.resize(width, height));
     }
 
+    public void dispose(){
+        states.forEach(State::dispose);
+    }
 
+    public void moveLeft(){
+        this.states.push(states.get(0));
+        states.remove(0);
+    }
 
 
 }

@@ -20,16 +20,6 @@ public class FrogJumpingState extends FrogState {
     @Override
     public void update(float delta) {
         applyDragForce();
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            frog.applyForceToCenter(Direction.LEFT.getVector(), WALKING_FORCE /4f);
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            frog.applyForceToCenter(Direction.RIGHT.getVector(), WALKING_FORCE /4f);
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            frog.changeState(Frog.GRAPPLE);
-        }
-
         if(frog.getNumFootContacts() > 0){
             if(frog.getBody().getLinearVelocity().y < 1) land();
         }
@@ -44,18 +34,15 @@ public class FrogJumpingState extends FrogState {
         super.onExit();
     }
 
-    void applyDragForce(){
+    public void applyDragForce(){
         if(frog.getBody().getLinearVelocity().y > 0.5f){
             frog.applyForceToCenter(Direction.DOWN.getVector(), DRAG_FORCE);
         }
+
     }
 
-    void land(){
-        if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D)){
-            this.entity.changeState(Frog.WALKING);
-        } else {
-            this.entity.changeState(Frog.IDLE);
-        }
+    public void land(){
+        this.entity.changeState(Frog.IDLE);
     }
 
     public static void jump(Frog frog, float force){

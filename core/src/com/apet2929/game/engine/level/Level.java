@@ -4,6 +4,7 @@ import com.apet2929.game.engine.box2d.CollisionHandler;
 import com.apet2929.game.engine.box2d.OnCollision;
 import com.apet2929.game.engine.box2d.entity.Entity;
 import com.apet2929.game.engine.box2d.entity.Frog;
+import com.apet2929.game.engine.box2d.entity.PlayerFrog;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,9 +24,9 @@ public class Level {
 
     public void update(float delta){
         this.world.step(delta, 6, 2);
-        entities.forEach((Entity entity) -> {
+        for (Entity entity : entities) {
             entity.update(delta);
-        });
+        }
     }
 
     public void render(SpriteBatch sb){
@@ -49,5 +50,14 @@ public class Level {
     public void addCollisionListener(OnCollision onCollision){
         collisionHandler.addCollisionListener(onCollision);
         world.setContactListener(collisionHandler);
+    }
+
+    public void addEntity(Entity entity){
+        entities.add(entity);
+    }
+
+    public void removeEntity(Entity entity){
+        entities.remove(entity);
+        world.destroyBody(entity.getBody());
     }
 }

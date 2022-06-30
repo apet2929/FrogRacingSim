@@ -4,5 +4,6 @@ public enum EntityType {
     WALL,
     BALL,
     FROG,
+    PLAYER
 
 }

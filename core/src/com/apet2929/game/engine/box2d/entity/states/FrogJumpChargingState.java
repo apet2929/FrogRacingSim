@@ -10,7 +10,7 @@ import static com.apet2929.game.engine.Utils.clamp;
 
 public class FrogJumpChargingState extends FrogState{
 
-    private float elapsedTime;
+    public float elapsedTime;
     public static final float MAX_CHARGE = 1.0f;
     public FrogJumpChargingState(SmartEntity entity) {
         super(entity, Frog.JUMP_CHARGING);
@@ -20,7 +20,7 @@ public class FrogJumpChargingState extends FrogState{
     public void update(float delta) {
         super.update(delta);
         elapsedTime += delta;
-        if(elapsedTime > MAX_CHARGE || !Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if(elapsedTime > MAX_CHARGE) {
             jump();
         }
     }
@@ -35,7 +35,7 @@ public class FrogJumpChargingState extends FrogState{
         super.onExit();
     }
 
-    void jump(){
+    public void jump(){
         float force_percent = clamp(elapsedTime, 0.3f, 1.0f);
         FrogJumpingState.jump(frog, force_percent * JUMPING_FORCE);
     }
