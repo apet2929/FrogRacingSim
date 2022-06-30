@@ -46,7 +46,7 @@ public class FrogJumpingState extends FrogState {
     }
 
     public static void jump(Frog frog, float force){
-        System.out.println("Jumping!");
+//        System.out.println("Jumping!");
         frog.applyImpulseToCenter(new Vector2(0, 1), force);
         frog.changeState(Frog.JUMPING);
     }

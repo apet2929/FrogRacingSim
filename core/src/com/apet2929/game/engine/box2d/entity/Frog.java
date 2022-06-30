@@ -156,8 +156,8 @@ public class Frog extends SmartEntity {
 
     @Override
     public void changeState(String name) {
+//        System.out.println("Changing state! " + this.getState() + " -> " + name);
         super.changeState(name);
-        System.out.println("Changing state! " + this.getState() + " -> " + name);
     }
 
     public void drawTongue(ShapeRenderer sr){

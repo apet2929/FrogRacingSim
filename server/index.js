@@ -39,6 +39,18 @@ io.on('connection', function(socket) {
 
     });
 
+    socket.on("tick", function(data) {
+        data.id = socket.id;
+        socket.broadcast.emit("tick", data);
+        console.log("Tick recieved! data = " + JSON.stringify(data, null, 4));
+        for(var i = 0; i < players.length; i++){
+            if(players[i].id === socket.id){
+                players[i].x = data.x;
+                players[i].y = data.y;
+            }
+        }
+    });
+
     
     console.log(players);
 

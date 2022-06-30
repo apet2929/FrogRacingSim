@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -73,7 +74,7 @@ public class GameStateManager  {
         state.show();
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         states.peek().update(delta);
     }
 
@@ -105,11 +106,6 @@ public class GameStateManager  {
 
     public void dispose(){
         states.forEach(State::dispose);
-    }
-
-    public void moveLeft(){
-        this.states.push(states.get(0));
-        states.remove(0);
     }
 
 

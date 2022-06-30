@@ -11,6 +11,9 @@ import org.json.JSONObject;
 
 public class Utils {
 
+    public static final float NET_TICKS_PER_SECOND = 30;
+    public static final float NET_TIME_PER_TICK = 1 / NET_TICKS_PER_SECOND;
+
     public static final int VIEWPORT_SIZE = 100;
     public static final float TILE_SIZE = 5;
     public static final float WORLD_SCALE = TILE_SIZE / VIEWPORT_SIZE;

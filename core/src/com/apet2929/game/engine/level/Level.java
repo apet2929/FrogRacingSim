@@ -23,6 +23,7 @@ public class Level {
     }
 
     public void update(float delta){
+
         this.world.step(delta, 6, 2);
         for (Entity entity : entities) {
             entity.update(delta);

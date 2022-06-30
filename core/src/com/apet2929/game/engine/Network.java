@@ -16,23 +16,43 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.apet2929.game.engine.Utils.NET_TIME_PER_TICK;
+
 public class Network {
 
     private Socket socket;
     private HashMap<String, JSONObject> connectedPlayers;
-
+    private JSONObject data;
+    private Runnable onTickRequested;
+    private float elapsedTime;
 
     public Network() {
         connectedPlayers = new HashMap<>();
         connectSocket();
         configSocketEvents();
+        elapsedTime = 0;
+    }
+
+    public void update(float delta){
+        elapsedTime += delta;
+
+
+        if(elapsedTime >= NET_TIME_PER_TICK){
+            tick();
+            elapsedTime = 0;
+        }
+    }
+
+    public void tick(){
+        onTickRequested.run();
+        socket.emit("tick", data);
     }
 
     public void dispose() {
         socket.close();
     }
 
-    public void connectSocket(){
+    void connectSocket(){
         try{
             socket = IO.socket("http://localhost:8081/");
             socket.connect();
@@ -97,7 +117,9 @@ public class Network {
         });
     }
 
-
+    public void setData(JSONObject data){
+        this.data = data;
+    }
 
     public void putCallback(String eventId, Emitter.Listener callback){
         socket.on(eventId, callback);
@@ -105,5 +127,13 @@ public class Network {
 
     public String getSocketID(){
         return socket.id();
+    }
+
+    public void setOnTickRequested(Runnable onTickRequested) {
+        this.onTickRequested = onTickRequested;
+    }
+
+    public float getElapsedTime() {
+        return elapsedTime;
     }
 }

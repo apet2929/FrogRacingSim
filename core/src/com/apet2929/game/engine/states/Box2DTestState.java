@@ -63,25 +63,21 @@ public class Box2DTestState extends State {
         stage.act(delta);
         if(!connected) return;
 //        ball.getBody().applyForce(100.0f, 0.0f, ball.getBody().getPosition().x, ball.getBody().getPosition().y, true);
-
         level.update(delta);
+
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             System.out.println("frog.canJump() = " + frog.canJump());
             System.out.println("frog.getNumFootContacts() = " + frog.getNumFootContacts());
-
-            gsm.push(new Box2DTestState(gsm));
+            System.out.println(network.getElapsedTime());
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             gsm.pop();
             this.dispose();
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-            gsm.moveLeft();
-        }
 
         updateCamera();
-
+        network.update(delta);
     }
 
     @Override
@@ -205,6 +201,22 @@ public class Box2DTestState extends State {
                 removeFrog(getString(object, "id"));
             }
         });
+        network.putCallback("tick", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject object = (JSONObject) args[0];
+                String playerID = getString(object, "id");
+                float x = getDouble(object, "x").floatValue();
+                float y = getDouble(object, "y").floatValue();
+                if(frogs.containsKey(playerID)){
+                    updateFrog(playerID, x, y);
+                }
+            }
+        });
+
+        network.setOnTickRequested(() -> {
+            network.setData(getGameData());
+        });
     }
 
     Frog initFrog(JSONObject object){
@@ -246,6 +258,18 @@ public class Box2DTestState extends State {
     void removeFrog(String id){
         Frog frog = frogs.remove(id);
         level.removeEntity(frog);
+    }
+
+    JSONObject getGameData(){
+        JSONObject data = new JSONObject();
+        try{
+            data.put("x", frog.getPosition().x);
+            data.put("y", frog.getPosition().y);
+        } catch (JSONException e){
+            Gdx.app.log("SocketIO", "Error compiling game state to JSON");
+            e.printStackTrace();
+        }
+        return data;
     }
 
 
