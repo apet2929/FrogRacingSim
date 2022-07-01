@@ -46,6 +46,7 @@ public class AssetManager {
         instance = this;
         atlases = new ArrayList<>();
         atlases.add(new TextureAtlas("world-tiles.atlas"));
+        atlases.add(new TextureAtlas("frog-racer.atlas"));
     }
 
     public void printTextureNames(){

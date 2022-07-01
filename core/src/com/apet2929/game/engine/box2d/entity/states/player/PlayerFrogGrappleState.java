@@ -53,7 +53,7 @@ public class PlayerFrogGrappleState extends FrogGrappleState {
 
         closestFraction = Float.MAX_VALUE;
         frog.getBody().getWorld().rayCast((fixture, point, normal, fraction) -> {
-                    if(fixture.getUserData().equals("frog") || fixture.isSensor()) return 1;
+                    if(fixture.getUserData().equals("frog" + frog.getID()) || fixture.isSensor()) return 1;
                     if(fraction < closestFraction) {
                         closestFraction = fraction;
                         grapplePos = point;

@@ -27,6 +27,7 @@ public class FrogJumpingState extends FrogState {
 
     @Override
     public void onEnter() {
+        frog.changeAnimation(Frog.JUMPING);
     }
 
     @Override
@@ -49,6 +50,7 @@ public class FrogJumpingState extends FrogState {
 //        System.out.println("Jumping!");
         frog.applyImpulseToCenter(new Vector2(0, 1), force);
         frog.changeState(Frog.JUMPING);
+
     }
 
 

@@ -104,22 +104,15 @@ public class Frog extends SmartEntity {
     public void initAssets() {
         this.animations = new HashMap<>();
         AssetManager am = AssetManager.getInstance();
-        TextureRegion[] frames = {
-                am.get("brick1"),
-                am.get("brick2"),
-                am.get("clover")
-        };
-        Animation idleAnimation = new Animation(frames, 0.5f);
-        this.animations.put(IDLE, idleAnimation);
 
-        frames = new TextureRegion[]{
-                am.get("clover"),
-                am.get("rock01"),
-                am.get("rock02")
-        };
+        Animation jumping = new Animation(am.get("jump"), 9, 1.5f);
+        this.animations.put(JUMPING, jumping);
 
-        Animation walkingAnimation = new Animation(frames, 1f);
-        this.animations.put(WALKING, walkingAnimation);
+        Animation idle = new Animation(am.get("grapple-start"), 2, 1.0f);
+        this.animations.put(IDLE, idle);
+
+//        Animation walkingAnimation = new Animation(frames, 1f);
+        this.animations.put(WALKING, jumping);
     }
 
     @Override
@@ -260,5 +253,9 @@ public class Frog extends SmartEntity {
             System.out.println("grappleState.grapplePos = " + grappleState.grapplePos);
         }
 
+    }
+
+    public String getID() {
+        return id;
     }
 }
