@@ -36,8 +36,12 @@ public class FrogJumpChargingState extends FrogState{
     }
 
     public void jump(){
-        float force_percent = clamp(elapsedTime, 0.3f, 1.0f);
+        float force_percent = clamp(getPercentCharged(), 0.3f, 1.0f);
         FrogJumpingState.jump(frog, force_percent * JUMPING_FORCE);
+    }
+
+    public float getPercentCharged(){
+        return elapsedTime / MAX_CHARGE;
     }
 
 }

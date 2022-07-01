@@ -6,15 +6,23 @@ import com.apet2929.game.engine.box2d.entity.Entity;
 import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.PlayerFrog;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 
+import static com.apet2929.game.engine.Utils.TILE_SIZE;
+import static com.apet2929.game.engine.Utils.WORLD_SCALE;
+
 public class Level {
     World world;
     ArrayList<Entity> entities;
     CollisionHandler collisionHandler;
+
+    TextureRegion background;
+    TextureRegion sky;
+
 
     public Level() {
         this.collisionHandler = new CollisionHandler();
@@ -61,4 +69,5 @@ public class Level {
         entities.remove(entity);
         world.destroyBody(entity.getBody());
     }
+
 }

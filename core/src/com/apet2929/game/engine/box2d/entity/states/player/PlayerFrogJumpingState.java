@@ -27,7 +27,7 @@ public class PlayerFrogJumpingState extends com.apet2929.game.engine.box2d.entit
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
             frog.applyForceToCenter(Direction.RIGHT.getVector(), WALKING_FORCE /4f);
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)){
             frog.changeState(Frog.GRAPPLE);
         }
 
@@ -44,6 +44,7 @@ public class PlayerFrogJumpingState extends com.apet2929.game.engine.box2d.entit
             this.entity.changeState(Frog.IDLE);
         }
     }
+
 
 
 }

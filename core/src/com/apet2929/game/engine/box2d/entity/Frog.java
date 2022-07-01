@@ -10,6 +10,7 @@ import com.apet2929.game.engine.level.Level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -58,12 +59,10 @@ public class Frog extends SmartEntity {
                 Fixture other;
                 String otherID;
                 if(fA.getUserData().equals("foot" + id)){
-                    System.out.println("Has foot contact!");
                     frog = fA;
                     other = fB;
                     numFootContacts++;
                 } else if(fB.getUserData().equals("foot" + id)){
-                    System.out.println("Has foot contact!");
                     frog = fB;
                     other = fA;
                     numFootContacts++;
@@ -98,6 +97,13 @@ public class Frog extends SmartEntity {
                 }
             }
         });
+    }
+
+    @Override
+    public void update(float delta) {
+        String pastDirection = this.direction.name();
+        super.update(delta);
+        flip(pastDirection);
     }
 
     @Override
@@ -148,7 +154,6 @@ public class Frog extends SmartEntity {
         footFixture.setUserData("foot" + id);
     }
 
-
     public static boolean shouldWalk(){
         return Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D);
     }
@@ -168,7 +173,6 @@ public class Frog extends SmartEntity {
     public String getCurrentAnimationName() {
         return getKeyByValue(animations, currentAnimation);
     }
-
 
     public Direction getDirection(){
         return this.direction;
@@ -245,17 +249,18 @@ public class Frog extends SmartEntity {
         Double grappleX = getDouble(data, "grappleX");
         Double grappleY = getDouble(data, "grappleY");
         if(state.equals(GRAPPLE)){
-            System.out.println("Setting grapple pos!");
-            System.out.println("grappleX = " + grappleX);
-            System.out.println("grappleY = " + grappleY);
             FrogGrappleState grappleState = ((FrogGrappleState) stateMachine.getCurrent());
             grappleState.setGrapplePos(new Vector2(grappleX.floatValue(), grappleY.floatValue()));
-            System.out.println("grappleState.grapplePos = " + grappleState.grapplePos);
         }
-
     }
 
     public String getID() {
         return id;
+    }
+
+    void flip(String pastDirection){
+        if(!pastDirection.equals(this.direction.name())){
+            this.sprite.setBounds(this.sprite.getX() - this.sprite.getWidth(), this.sprite.getY(), -this.sprite.getWidth(), this.sprite.getHeight());
+        }
     }
 }

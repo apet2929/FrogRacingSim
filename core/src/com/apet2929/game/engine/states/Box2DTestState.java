@@ -7,6 +7,7 @@ import com.apet2929.game.engine.box2d.entity.Wall;
 import com.apet2929.game.engine.box2d.entity.Ball;
 import com.apet2929.game.engine.level.Level;
 import com.apet2929.game.engine.level.LevelLoader;
+import com.apet2929.game.engine.ui.JumpBar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -46,6 +47,7 @@ public class Box2DTestState extends State {
     Box2DDebugRenderer debugRenderer;
 
     Label canJumpLabel;
+    JumpBar jumpBar;
 
 //    Temporary
     ShapeRenderer sr;
@@ -109,6 +111,15 @@ public class Box2DTestState extends State {
         canJumpLabel.setText("Can frog jump? " + frog.canJump());
         canJumpLabel.validate();
         stage.draw();
+
+        drawGameUI(gsm.sb);
+    }
+
+    void drawGameUI(SpriteBatch sb){
+        sb.setProjectionMatrix(stageViewport.getCamera().combined);
+        sb.begin();
+        jumpBar.draw(sb, frog);
+        sb.end();
     }
 
     @Override
@@ -148,6 +159,7 @@ public class Box2DTestState extends State {
     void initUI(){
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
         stage = new Stage(stageViewport);
+        this.jumpBar = new JumpBar();
 
 //        TODO : Find a way to scale up the text
         Table root = new Table();
@@ -158,7 +170,7 @@ public class Box2DTestState extends State {
 
         canJumpLabel = new Label("Can frog jump? false", skin);
         canJumpLabel.setAlignment(Align.bottomRight);
-        root.add(canJumpLabel);
+//        root.add(canJumpLabel);
 //        canJumpLabel.setColor(1, 0, 0, 1);
         canJumpLabel.getStyle().fontColor = new Color(1, 0,0,1);
     }
@@ -168,7 +180,7 @@ public class Box2DTestState extends State {
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewport.getCamera().position.set(35, 40, 0);
         viewport.getCamera().update();
-        stageViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stageViewport = new FitViewport(100, 100);
     }
 
     void initNetwork() {

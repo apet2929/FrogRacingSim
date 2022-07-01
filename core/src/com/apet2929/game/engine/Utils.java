@@ -23,7 +23,7 @@ public class Utils {
 //    Forces
     public static final float WALKING_FORCE = 12000 * WORLD_SCALE;
     public static final float JUMPING_FORCE = 24000 * WORLD_SCALE;
-    public static final float GRAPPLE_FORCE = 11000 * WORLD_SCALE;
+    public static final float GRAPPLE_FORCE = 22000 * WORLD_SCALE;
     public static final float DRAG_FORCE = 600 * WORLD_SCALE;
 
     public static final float MAX_GRAPPLE_LENGTH = TILE_SIZE * 10;

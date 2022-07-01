@@ -31,7 +31,7 @@ public class PlayerFrogGrappleState extends FrogGrappleState {
         updateTonguePos();
         pullToTarget();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        if(!Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)){
             release();
         }
     }
