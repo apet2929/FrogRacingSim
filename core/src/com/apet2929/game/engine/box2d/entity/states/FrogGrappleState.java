@@ -13,7 +13,6 @@ public class FrogGrappleState extends FrogState{
     public Vector2 tonguePos;
     public Vector2 grapplePos;
 
-    float closestFraction; // used in finding grapplePos
 
     public FrogGrappleState(SmartEntity entity) {
         super(entity, Frog.GRAPPLE);
@@ -22,21 +21,12 @@ public class FrogGrappleState extends FrogState{
     @Override
     public void update(float delta) {
         updateTonguePos();
-        pullToTarget();
-
     }
 
     @Override
     public void onEnter() {
         System.out.println("frog.getDirection() = " + frog.getDirection());
         updateTonguePos();
-        initGrapplePos();
-        if(grapplePos == null) release();
-        else {
-            System.out.println("grapplePoint = " + grapplePos);
-            System.out.println("tonguePos = " + tonguePos);
-
-        }
     }
 
     @Override
@@ -49,7 +39,7 @@ public class FrogGrappleState extends FrogState{
         return tonguePos;
     }
 
-    public void drawTongue(ShapeRenderer sr){
+    public void drawTongue(ShapeRenderer sr) {
         sr.set(ShapeRenderer.ShapeType.Filled);
         sr.setColor(0.8f, 0.3f, 0.3f, 1f);
         sr.rectLine(tonguePos, grapplePos, 3);
@@ -63,30 +53,10 @@ public class FrogGrappleState extends FrogState{
         }
     }
 
-    public void pullToTarget(){
-        Vector2 direction = new Vector2(grapplePos.x - tonguePos.x, grapplePos.y - tonguePos.y).nor();
-
-        frog.applyForceToCenter(direction, GRAPPLE_FORCE);
-        if(direction.y > 0.85) { // release if angle is too steep
-            System.out.println("direction = " + direction);
-            System.out.println("direction.len() = " + direction.len());
-            release();
-        }
+    public void setGrapplePos(Vector2 pos){
+        grapplePos = pos;
     }
 
-    public void initGrapplePos() {
-        Vector2 pos = this.frog.getPosition();
-        float grappleTargetX = frog.getDirection().getVector().x * MAX_GRAPPLE_LENGTH;
 
-        closestFraction = Float.MAX_VALUE;
-        frog.getBody().getWorld().rayCast((fixture, point, normal, fraction) -> {
-            if(fixture.getUserData().equals("frog") || fixture.isSensor()) return 1;
-            if(fraction < closestFraction) {
-                closestFraction = fraction;
-                grapplePos = point;
-            }
-            return 1;
-        }, tonguePos,
-            new Vector2(pos.x + grappleTargetX, pos.y));
-    }
+
 }

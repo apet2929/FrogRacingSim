@@ -41,6 +41,18 @@ public class Animation {
         }
     }
 
+    public int getFrameIndex() {
+        return this.frame;
+    }
+
+    public void setCurrentFrame(int index){
+        frame = index;
+    }
+
+    public TextureRegion getFrame(int index){
+        return frames.get(index);
+    }
+
     public TextureRegion getFrame(){
         return frames.get(frame);
     }

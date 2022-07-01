@@ -17,10 +17,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Objects;
 
-import static com.apet2929.game.engine.Utils.TILE_SIZE;
+import static com.apet2929.game.engine.Utils.*;
 
 public class Frog extends SmartEntity {
     public static final String IDLE = "idle";
@@ -37,6 +40,7 @@ public class Frog extends SmartEntity {
 
     public Frog(Level level, float x, float y, String id) {
         super(EntityType.FROG);
+        this.id = id;
         initBody(level.getWorld(), x, y);
         initCollisionListener(level);
         this.sprite = new Sprite(this.currentAnimation.getFrame());
@@ -53,11 +57,13 @@ public class Frog extends SmartEntity {
                 Fixture frog;
                 Fixture other;
                 String otherID;
-                if(fA.getUserData().equals("foot")){
+                if(fA.getUserData().equals("foot" + id)){
+                    System.out.println("Has foot contact!");
                     frog = fA;
                     other = fB;
                     numFootContacts++;
-                } else if(fB.getUserData().equals("foot")){
+                } else if(fB.getUserData().equals("foot" + id)){
+                    System.out.println("Has foot contact!");
                     frog = fB;
                     other = fA;
                     numFootContacts++;
@@ -76,11 +82,11 @@ public class Frog extends SmartEntity {
                 Fixture frog;
                 Fixture other;
                 String otherID;
-                if(fA.getUserData().equals("foot")){
+                if(fA.getUserData().equals("foot" + id)){
                     frog = fA;
                     other = fB;
                     numFootContacts--;
-                } else if(fB.getUserData().equals("foot")){
+                } else if(fB.getUserData().equals("foot" + id)){
                     frog = fB;
                     other = fA;
                     numFootContacts--;
@@ -139,14 +145,14 @@ public class Frog extends SmartEntity {
     void initBody(World world, float x, float y){
         BodyFactory factory = BodyFactory.getInstance(world);
         this.body = factory.makeRectBody(x, y, BODY_WIDTH, BODY_HEIGHT, Material.WOOD, BodyDef.BodyType.DynamicBody, true);
-        this.body.getFixtureList().get(0).setUserData("frog");
+        this.body.getFixtureList().get(0).setUserData("frog" + id);
         PolygonShape footFixtureShape = new PolygonShape();
         footFixtureShape.setAsBox(BODY_WIDTH/3f, BODY_HEIGHT/5, new Vector2(0, -BODY_HEIGHT/2f), 0);
 
         Fixture footFixture = this.body.createFixture(footFixtureShape, 0.0f);
 
         footFixture.setSensor(true);
-        footFixture.setUserData("foot");
+        footFixture.setUserData("foot" + id);
     }
 
 
@@ -166,6 +172,11 @@ public class Frog extends SmartEntity {
         }
     }
 
+    public String getCurrentAnimationName() {
+        return getKeyByValue(animations, currentAnimation);
+    }
+
+
     public Direction getDirection(){
         return this.direction;
     }
@@ -180,5 +191,74 @@ public class Frog extends SmartEntity {
 
     public void setID(String id){
         this.id = id;
+        this.body.getFixtureList().get(0).setUserData("frog" + id);
+        this.body.getFixtureList().get(1).setUserData("foot" + id);
+    }
+
+    public JSONObject toJSON(){
+        JSONObject data = new JSONObject();
+        try {
+            data.put("id", this.id);
+
+            data.put("posX", this.getPosition().x);
+            data.put("posY", this.getPosition().y);
+            data.put("velX", this.body.getLinearVelocity().x);
+            data.put("velY", this.body.getLinearVelocity().y);
+
+            data.put("state", this.getState());
+            data.put("animation", this.getCurrentAnimationName());
+            data.put("frame", this.currentAnimation.getFrameIndex());
+
+            Float grappleX = Float.MAX_VALUE;
+            Float grappleY = Float.MAX_VALUE;
+            if(this.getState().equals(GRAPPLE)){
+                Vector2 grapplePos = ((FrogGrappleState) stateMachine.getCurrent()).grapplePos;
+                grappleX = grapplePos.x;
+                grappleY = grapplePos.y;
+            }
+            data.put("grappleX", grappleX);
+            data.put("grappleY", grappleY);
+
+        } catch (JSONException e){
+            Gdx.app.log("Frog", "Failed to collect Frog data to JSON");
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public void setState(JSONObject data){
+        float x = getDouble(data, "posX").floatValue();
+        float y = getDouble(data, "posY").floatValue();
+        this.body.setTransform(new Vector2(x, y), 0);
+
+        float vx = getDouble(data, "velX").floatValue();
+        float vy = getDouble(data, "velY").floatValue();
+        this.body.setLinearVelocity(vx, vy);
+
+        String state = getString(data, "state");
+        if(!this.getState().equals(state)) {
+            this.stateMachine.change(state);
+        }
+
+        String animationName = getString(data, "animation");
+        int frame = getInt(data, "frame");
+        if(animations.get(animationName) != this.currentAnimation){
+            changeAnimation(animationName);
+        }
+        if(frame != currentAnimation.getFrameIndex()){
+            currentAnimation.setCurrentFrame(frame);
+        }
+
+        Double grappleX = getDouble(data, "grappleX");
+        Double grappleY = getDouble(data, "grappleY");
+        if(state.equals(GRAPPLE)){
+            System.out.println("Setting grapple pos!");
+            System.out.println("grappleX = " + grappleX);
+            System.out.println("grappleY = " + grappleY);
+            FrogGrappleState grappleState = ((FrogGrappleState) stateMachine.getCurrent());
+            grappleState.setGrapplePos(new Vector2(grappleX.floatValue(), grappleY.floatValue()));
+            System.out.println("grappleState.grapplePos = " + grappleState.grapplePos);
+        }
+
     }
 }

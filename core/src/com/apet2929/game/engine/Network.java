@@ -23,6 +23,7 @@ public class Network {
     private Socket socket;
     private HashMap<String, JSONObject> connectedPlayers;
     private JSONObject data;
+    private ArrayList<JSONObject> playerUpdateData;
     private Runnable onTickRequested;
     private float elapsedTime;
 
@@ -31,6 +32,7 @@ public class Network {
         connectSocket();
         configSocketEvents();
         elapsedTime = 0;
+        playerUpdateData = new ArrayList<>();
     }
 
     public void update(float delta){
@@ -114,6 +116,12 @@ public class Network {
                     e.printStackTrace();
                 }
             }
+        }).on("tick", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                playerUpdateData.add(data);
+            }
         });
     }
 
@@ -131,6 +139,14 @@ public class Network {
 
     public void setOnTickRequested(Runnable onTickRequested) {
         this.onTickRequested = onTickRequested;
+    }
+
+    public ArrayList<JSONObject> getPlayerUpdateData() {
+        return playerUpdateData;
+    }
+
+    public void clearPlayerUpdateData(){
+        playerUpdateData.clear();
     }
 
     public float getElapsedTime() {

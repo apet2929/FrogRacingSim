@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.apet2929.game.engine.Utils.*;
@@ -63,8 +64,8 @@ public class Box2DTestState extends State {
         stage.act(delta);
         if(!connected) return;
 //        ball.getBody().applyForce(100.0f, 0.0f, ball.getBody().getPosition().x, ball.getBody().getPosition().y, true);
+        updateFrogs();
         level.update(delta);
-
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             System.out.println("frog.canJump() = " + frog.canJump());
@@ -94,7 +95,9 @@ public class Box2DTestState extends State {
 
         sr.setProjectionMatrix(viewport.getCamera().combined);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        frog.drawTongue(sr);
+        for (Frog frog : frogs.values()) {
+            frog.drawTongue(sr);
+        }
         sr.end();
 
         debugRenderer.render(level.getWorld(), viewport.getCamera().combined);
@@ -182,13 +185,16 @@ public class Box2DTestState extends State {
         network.putCallback("newPlayer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                initFrog((JSONObject) args[0]);
+                JSONObject object = (JSONObject) args[0];
+                String id = getString(object, "id");
+                initFrog(id, 0, 30, false);
             }
         });
         network.putCallback("getPlayers", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONArray objects = (JSONArray) args[0];
+                System.out.println("objects = " + objects);
                     for (int i = 0; i < objects.length(); i++) {
                         initFrog(getArrayAt(objects, i));
                     }
@@ -201,29 +207,16 @@ public class Box2DTestState extends State {
                 removeFrog(getString(object, "id"));
             }
         });
-        network.putCallback("tick", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                JSONObject object = (JSONObject) args[0];
-                String playerID = getString(object, "id");
-                float x = getDouble(object, "x").floatValue();
-                float y = getDouble(object, "y").floatValue();
-                if(frogs.containsKey(playerID)){
-                    updateFrog(playerID, x, y);
-                }
-            }
-        });
-
         network.setOnTickRequested(() -> {
             network.setData(getGameData());
         });
     }
 
     Frog initFrog(JSONObject object){
-        float x = getDouble(object, "x").floatValue();
-        float y = getDouble(object, "y").floatValue();
         String id = getString(object, "id");
-        return initFrog(id, x, y, false);
+        Frog frog = initFrog(id, 0, 30, false);
+//        frog.setState(object);
+        return frog;
     }
 
     Frog initFrog(String id, float x, float y, boolean player){
@@ -240,18 +233,21 @@ public class Box2DTestState extends State {
         return frog;
     }
 
-    void updateFrog(JSONObject object){
-        float x = getDouble(object, "x").floatValue();
-        float y = getDouble(object, "y").floatValue();
-        String id = getString(object, "id");
-        updateFrog(id, x, y);
+    void updateFrogs(){
+        ArrayList<JSONObject> playerData = network.getPlayerUpdateData();
+        for (JSONObject playerDatum : playerData) {
+            updateFrog(playerDatum);
+        }
+
+        network.clearPlayerUpdateData();
     }
 
-    void updateFrog(String id, float x, float y) {
+    void updateFrog(JSONObject object){
+        String id = getString(object, "id");
         if(frogs.containsKey(id)){
-            frogs.get(id).setPosition(new Vector2(x, y));
+            frogs.get(id).setState(object);
         } else {
-            initFrog(id, x, y, false);
+            initFrog(id, 0, 0, false);
         }
     }
 
@@ -261,15 +257,8 @@ public class Box2DTestState extends State {
     }
 
     JSONObject getGameData(){
-        JSONObject data = new JSONObject();
-        try{
-            data.put("x", frog.getPosition().x);
-            data.put("y", frog.getPosition().y);
-        } catch (JSONException e){
-            Gdx.app.log("SocketIO", "Error compiling game state to JSON");
-            e.printStackTrace();
-        }
-        return data;
+
+        return frog.toJSON();
     }
 
 

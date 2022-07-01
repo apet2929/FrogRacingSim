@@ -13,8 +13,17 @@ import static com.apet2929.game.engine.Utils.GRAPPLE_FORCE;
 import static com.apet2929.game.engine.Utils.MAX_GRAPPLE_LENGTH;
 
 public class PlayerFrogGrappleState extends FrogGrappleState {
+    float closestFraction; // used in finding grapplePos
+
     public PlayerFrogGrappleState(SmartEntity entity) {
         super(entity);
+    }
+
+    @Override
+    public void onEnter() {
+        super.onEnter();
+        initGrapplePos();
+        if(grapplePos == null) release();
     }
 
     @Override
@@ -25,6 +34,33 @@ public class PlayerFrogGrappleState extends FrogGrappleState {
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             release();
         }
+    }
+
+    public void pullToTarget(){
+        Vector2 direction = new Vector2(grapplePos.x - tonguePos.x, grapplePos.y - tonguePos.y).nor();
+
+        frog.applyForceToCenter(direction, GRAPPLE_FORCE);
+        if(direction.y > 0.85) { // release if angle is too steep
+            System.out.println("direction = " + direction);
+            System.out.println("direction.len() = " + direction.len());
+            release();
+        }
+    }
+
+    public void initGrapplePos() {
+        Vector2 pos = this.frog.getPosition();
+        float grappleTargetX = frog.getDirection().getVector().x * MAX_GRAPPLE_LENGTH;
+
+        closestFraction = Float.MAX_VALUE;
+        frog.getBody().getWorld().rayCast((fixture, point, normal, fraction) -> {
+                    if(fixture.getUserData().equals("frog") || fixture.isSensor()) return 1;
+                    if(fraction < closestFraction) {
+                        closestFraction = fraction;
+                        grapplePos = point;
+                    }
+                    return 1;
+                }, tonguePos,
+                new Vector2(pos.x + grappleTargetX, pos.y));
     }
 
 }

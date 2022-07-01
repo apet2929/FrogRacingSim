@@ -9,6 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+import java.util.Objects;
+
 public class Utils {
 
     public static final float NET_TICKS_PER_SECOND = 30;
@@ -98,12 +101,32 @@ public class Utils {
         return null;
     }
 
+    public static Integer getInt(JSONObject object, String key){
+        try {
+            return object.getInt(key);
+        } catch (JSONException e) {
+            Gdx.app.log("JSON", "Error getting double data with key: " + key);
+//            e.printStackTrace();
+            System.out.println("object = " + object);
+        }
+        return null;
+    }
+
     public static JSONObject getArrayAt(JSONArray array, int index){
         try {
             return array.getJSONObject(index);
         } catch (JSONException e) {
             Gdx.app.log("JSON", "Error getting JSON object from array at index: " + index);
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
         }
         return null;
     }

@@ -24,10 +24,10 @@ io.on('connection', function(socket) {
     socket.emit('socketID', { id: socket.id });
     socket.emit("getPlayers", players);
 
-    let player = new Player(socket.id, 0, 10); 
+    let player = new Player(socket.id, null,null,null,null,null,null,null); 
     players.push(player);
 
-    socket.broadcast.emit("newPlayer", player);
+    socket.broadcast.emit("newPlayer", { id: socket.id });
     socket.on('disconnect', function() {
         console.log("Player disconnected!" + socket.id);
         socket.broadcast.emit("playerDisconnected", { id: socket.id });
@@ -36,17 +36,21 @@ io.on('connection', function(socket) {
                 players.splice(i, 1);
             }
         }
-
     });
 
     socket.on("tick", function(data) {
-        data.id = socket.id;
         socket.broadcast.emit("tick", data);
-        console.log("Tick recieved! data = " + JSON.stringify(data, null, 4));
-        for(var i = 0; i < players.length; i++){
-            if(players[i].id === socket.id){
+        // console.log("Tick recieved! data = " + JSON.stringify(data, null, 4));
+        for(var i = 0; i < data.length; i++){
+            
+            if(players[i].id === data.id){
                 players[i].x = data.x;
                 players[i].y = data.y;
+                players[i].vx = data.vx;
+                players[i].vy = data.vy;
+                players[i].state = data.state;
+                players[i].animation = data.animation;
+                players[i].frame = data.frame;
             }
         }
     });
@@ -57,10 +61,16 @@ io.on('connection', function(socket) {
 });
 
 class Player {
-    constructor(id, x, y) {
+    constructor(id, x, y, vx, vy, state, animation, frame) {
         this.id = id;
         this.x = x;
         this.y = y;
-
+        this.vx = vx;
+        this.vy = vy;
+        this.state = state;
+        this.animation = animation;
+        this.frame = frame;
+        this.grappleX = null;
+        this.grappleY = null;
     }
 }

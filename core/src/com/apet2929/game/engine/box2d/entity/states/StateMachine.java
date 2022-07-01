@@ -36,6 +36,9 @@ public class StateMachine {
         return current;
     }
 
+    public void setCurrent(String name){
+        current = this.states.get(name).create();
+    }
     public void addState(String name, StateGenerator stateGenerator){
         this.states.put(name, stateGenerator);
     }
