@@ -1,0 +1,59 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "levels/level1.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 6084,
+                "y": 5956
+            }
+        },
+        "levels/test.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3244,
+                "y": 3484
+            }
+        },
+        "tiles.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.0625,
+            "scaleInEditor": 0.0625
+        },
+        "world-tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.0625,
+            "scaleInEditor": 0.0625
+        }
+    },
+    "last.exportedFilePath": "C:/Users/reala/Documents/Code/GameDev/FrogDatingSim/assets/levels",
+    "last.imagePath": "C:/Users/reala/Documents/Code/GameDev/FrogDatingSim/assets",
+    "map.fixedSize": true,
+    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.renderOrder": null,
+    "map.width": 20,
+    "openFiles": [
+    ],
+    "project": "levels.tiled-project",
+    "recentFiles": [
+        "levels/level1.tmx",
+        "levels/test.tmx",
+        "world-tiles.tsx",
+        "tiles.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 25,
+        "width": 25
+    },
+    "tileset.type": 0
+}

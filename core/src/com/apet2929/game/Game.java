@@ -2,6 +2,7 @@ package com.apet2929.game;
 
 import com.apet2929.game.engine.states.Box2DTestState;
 import com.apet2929.game.engine.states.GameStateManager;
+import com.apet2929.game.engine.states.TiledTestState;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;

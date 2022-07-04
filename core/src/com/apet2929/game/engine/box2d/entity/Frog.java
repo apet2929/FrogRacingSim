@@ -61,17 +61,17 @@ public class Frog extends SmartEntity {
                 if(fA.getUserData().equals("foot" + id)){
                     frog = fA;
                     other = fB;
-                    numFootContacts++;
                 } else if(fB.getUserData().equals("foot" + id)){
                     frog = fB;
                     other = fA;
-                    numFootContacts++;
+
                 } else {
                     return;
                 }
                 otherID = (String) other.getBody().getFixtureList().get(0).getUserData();
-                if(otherID.equals("wall")){
 
+                if(!other.isSensor()){
+                    numFootContacts++;
                 }
             }
 

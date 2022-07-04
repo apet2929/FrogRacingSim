@@ -18,8 +18,12 @@ public class Utils {
     public static final float NET_TIME_PER_TICK = 1 / NET_TICKS_PER_SECOND;
 
     public static final int VIEWPORT_SIZE = 100;
+    public static final float SCREEN_TO_WORLD_RATIO = Gdx.graphics.getWidth() / VIEWPORT_SIZE;
     public static final float TILE_SIZE = 5;
+    public static final float PPM = VIEWPORT_SIZE / TILE_SIZE;
     public static final float WORLD_SCALE = TILE_SIZE / VIEWPORT_SIZE;
+    public static final float UNIT_SCALE = TILE_SIZE/417f;
+
 //    Forces
     public static final float WALKING_FORCE = 12000 * WORLD_SCALE;
     public static final float JUMPING_FORCE = 24000 * WORLD_SCALE;
@@ -28,10 +32,11 @@ public class Utils {
 
     public static final float MAX_GRAPPLE_LENGTH = TILE_SIZE * 10;
 
-    public static final float PPM = VIEWPORT_SIZE / TILE_SIZE;
-
     public static final int[] WASD = new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D};
 
+    public static float getUnitScale(){
+        return (float) VIEWPORT_SIZE / Gdx.graphics.getWidth();
+    }
     public static void clearScreen(){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(1,1,1,1);

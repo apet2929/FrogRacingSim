@@ -35,7 +35,7 @@ public class FrogGrappleState extends FrogState{
     }
 
     public Vector2 updateTonguePos(){
-        tonguePos = new Vector2(frog.getPosition().x + Frog.BODY_WIDTH*0.7f, frog.getPosition().y);
+        tonguePos = new Vector2(frog.getPosition().x + Frog.BODY_WIDTH*0.7f * frog.getDirection().getVector().x, frog.getPosition().y);
         return tonguePos;
     }
 
@@ -55,6 +55,10 @@ public class FrogGrappleState extends FrogState{
 
     public void setGrapplePos(Vector2 pos){
         grapplePos = pos;
+    }
+
+    public boolean canGrappleTo(String fixtureID){
+        return !fixtureID.contains("frog") && !fixtureID.contains("foot");
     }
 
 

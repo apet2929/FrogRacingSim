@@ -11,8 +11,10 @@ import com.apet2929.game.engine.ui.JumpBar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -36,6 +38,7 @@ public class Box2DTestState extends State {
 
     FitViewport viewport;
     FitViewport stageViewport;
+    OrthographicCamera tiledMapCamera;
 
     Stage stage;
     Skin skin;
@@ -44,6 +47,8 @@ public class Box2DTestState extends State {
     HashMap<String, Frog> frogs;
     PlayerFrog frog;
     Level level;
+
+    OrthogonalTiledMapRenderer tmr;
     Box2DDebugRenderer debugRenderer;
 
     Label canJumpLabel;
@@ -53,19 +58,19 @@ public class Box2DTestState extends State {
     ShapeRenderer sr;
     public Box2DTestState(GameStateManager gsm) {
         super(gsm);
+        initWorld();
         initNetwork();
         initViewport();
-        initWorld();
         initUI();
         sr = new ShapeRenderer();
         this.debugRenderer = new Box2DDebugRenderer();
+        tmr = new OrthogonalTiledMapRenderer(level.getMap(), UNIT_SCALE);
     }
 
     @Override
     public void update(float delta) {
         stage.act(delta);
         if(!connected) return;
-//        ball.getBody().applyForce(100.0f, 0.0f, ball.getBody().getPosition().x, ball.getBody().getPosition().y, true);
         updateFrogs();
         level.update(delta);
 
@@ -73,6 +78,7 @@ public class Box2DTestState extends State {
             System.out.println("frog.canJump() = " + frog.canJump());
             System.out.println("frog.getNumFootContacts() = " + frog.getNumFootContacts());
             System.out.println(network.getElapsedTime());
+            System.out.println("tiledMapCamera = " + tiledMapCamera.zoom);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             gsm.pop();
@@ -90,6 +96,8 @@ public class Box2DTestState extends State {
         if(!connected) return;
 
         viewport.apply();
+
+        drawTiledMap();
         sb.setProjectionMatrix(viewport.getCamera().combined);
         sb.begin();
         level.render(sb);
@@ -106,6 +114,13 @@ public class Box2DTestState extends State {
         drawUI();
     }
 
+
+    void drawTiledMap(){
+        tmr.setView((OrthographicCamera) viewport.getCamera());
+        tmr.render();
+
+
+    }
     void drawUI(){
         stageViewport.apply();
         canJumpLabel.setText("Can frog jump? " + frog.canJump());
@@ -141,18 +156,21 @@ public class Box2DTestState extends State {
     }
 
     void initWorld(){
+        tiledMapCamera = new OrthographicCamera();
+        tiledMapCamera.setToOrtho(false, VIEWPORT_SIZE, VIEWPORT_SIZE);
+        tiledMapCamera.zoom = 20;
         this.frogs = new HashMap<>();
         int[][] tiles =
         {
                 {-1,-1,-1,-1,-1,-1,-1,-1},
-                {-1,-1,-1,-1,-1,-1,-1,0, -1,-1,-1,-1,-1,0},
-                {-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,0},
-                {-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,0},
+                {-1,-1,-1,-1,-1,-1,-1,4, -1,-1,-1,-1,-1,0},
+                {-1,-1,-1,-1,-1,-1,-1,4, -1,-1,-1,-1,-1,0},
+                {-1,-1,-1,-1,-1,-1,-1,4, -1,-1,-1,-1,-1,0},
                 {-1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
         };
-        this.level = LevelLoader.Load(tiles);
-        this.frog = (PlayerFrog) initFrog("", 0, 30, true);
+        this.level = LevelLoader.Load(Level.LEVELS[0]);
+        this.frog = (PlayerFrog) initFrog("", 2 * TILE_SIZE, 2 * TILE_SIZE, true);
 
     }
 
@@ -178,9 +196,10 @@ public class Box2DTestState extends State {
     void initViewport(){
         viewport = new FitViewport(VIEWPORT_SIZE, VIEWPORT_SIZE);
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        viewport.getCamera().position.set(35, 40, 0);
+        viewport.getCamera().position.set(0, 0, 0);
+        ((OrthographicCamera)viewport.getCamera()).zoom = 0.5f;
         viewport.getCamera().update();
-        stageViewport = new FitViewport(100, 100);
+        stageViewport = new FitViewport(VIEWPORT_SIZE, VIEWPORT_SIZE);
     }
 
     void initNetwork() {

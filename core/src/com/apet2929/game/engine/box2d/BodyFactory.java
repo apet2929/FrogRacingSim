@@ -19,14 +19,32 @@ public class BodyFactory {
         return instance;
     }
 
+    public Body makeSensorRectBody(float x, float y, float width, float height){
+        BodyDef bodyDef = createBodyDef(x, y, BodyDef.BodyType.StaticBody, true);
+
+        Body body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width/2, height/2);
+        Fixture fixture = body.createFixture(Material.WOOD.makeFixture(shape));
+        fixture.setSensor(true);
+        shape.dispose();
+        return body;
+    }
+
+
     public Body makePolygonShapeBody(Vector2[] vertices, float x, float y, Material material, BodyDef.BodyType bodyType){
         BodyDef boxBodyDef = createBodyDef(x, y, bodyType, false);
+
         Body boxBody = world.createBody(boxBodyDef);
+
 
         PolygonShape polygon = new PolygonShape();
         polygon.set(vertices);
+
         boxBody.createFixture(material.makeFixture(polygon));
+
         polygon.dispose();
+
 
         return boxBody;
     }

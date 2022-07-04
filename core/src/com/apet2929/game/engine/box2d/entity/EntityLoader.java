@@ -12,17 +12,24 @@ public class EntityLoader {
 
 
     public static Entity LoadFromType(Level level, EntityType type, float x, float y){
+        Entity entity;
         switch(type){
             case WALL: {
-                return new Wall(level.getWorld(), x, y, TILE_SIZE, TILE_SIZE);
+                entity = new Wall(level.getWorld(), x, y, TILE_SIZE, TILE_SIZE);
+                break;
             }
             case BALL: {
-                return new Ball(level.getWorld(), x, y);
+                entity = new Ball(level.getWorld(), x, y);
+                break;
             }
-
-
+            case LAMP: {
+                entity = new GrappleTarget(level.getWorld(), EntityType.LAMP, x, y, TILE_SIZE, TILE_SIZE);
+                break;
+            }
             default:
                 throw new IllegalArgumentException("EntityType of " + type.name() + " not supported!");
         }
+        level.addEntity(entity);
+        return entity;
     }
 }

@@ -7,6 +7,7 @@ import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.PlayerFrog;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -19,15 +20,18 @@ public class Level {
     World world;
     ArrayList<Entity> entities;
     CollisionHandler collisionHandler;
+    TiledMap map;
 
-    TextureRegion background;
-    TextureRegion sky;
-
+    public static final String[] LEVELS = {
+            "levels/level1.tmx",
+            "levels/test.tmx",
+    };
 
     public Level() {
         this.collisionHandler = new CollisionHandler();
         world = new World(new Vector2(0, -50f), true);
         entities = new ArrayList<>();
+        map = new TiledMap();
     }
 
     public void update(float delta){
@@ -39,7 +43,7 @@ public class Level {
     }
 
     public void render(SpriteBatch sb){
-        entities.forEach((Entity entity) -> {
+        getFrogs().forEach((Entity entity) -> {
             entity.render(sb);
         });
     }
@@ -70,4 +74,10 @@ public class Level {
         world.destroyBody(entity.getBody());
     }
 
+    public void setMap(TiledMap map){
+        this.map = map;
+    }
+    public TiledMap getMap() {
+        return map;
+    }
 }

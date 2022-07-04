@@ -17,15 +17,6 @@ public class FrogJumpChargingState extends FrogState{
     }
 
     @Override
-    public void update(float delta) {
-        super.update(delta);
-        elapsedTime += delta;
-        if(elapsedTime > MAX_CHARGE) {
-            jump();
-        }
-    }
-
-    @Override
     public void onEnter() {
         super.onEnter();
     }

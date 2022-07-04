@@ -8,6 +8,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.HashMap;
 
 public class PlayerFrog extends Frog{
+
+    public float charge;
+
     public PlayerFrog(Level level, float x, float y, String id) {
         super(level, x, y, id);
     }

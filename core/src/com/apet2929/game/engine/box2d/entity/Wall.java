@@ -14,6 +14,7 @@ public class Wall extends Entity {
         super(EntityType.WALL);
         this.width = width;
         this.height = height;
+        this.sprite.setSize(this.width, this.height);
 
         BodyFactory factory = BodyFactory.getInstance(world);
         this.body = factory.makeRectBody(x, y, TILE_SIZE, TILE_SIZE, Material.STEEL, BodyDef.BodyType.StaticBody, true);
@@ -25,6 +26,6 @@ public class Wall extends Entity {
     @Override
     public void initAssets() {
         this.sprite = new Sprite(AssetManager.getInstance().get("brick1"));
-        this.sprite.setSize(this.width, this.height);
+
     }
 }

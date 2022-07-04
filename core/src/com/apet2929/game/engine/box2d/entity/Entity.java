@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import java.util.HashMap;
 
 public abstract class Entity{
     Sprite sprite;
@@ -15,8 +14,8 @@ public abstract class Entity{
     EntityType entityType;
 
     public Entity(EntityType entityType) {
-        initAssets();
         this.entityType = entityType;
+        initAssets();
 
     }
 
