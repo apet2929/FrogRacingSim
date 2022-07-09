@@ -26,6 +26,7 @@ public class Network {
     private ArrayList<JSONObject> playerUpdateData;
     private Runnable onTickRequested;
     private float elapsedTime;
+    private int roomId;
 
     public Network() {
         connectedPlayers = new HashMap<>();
@@ -33,11 +34,11 @@ public class Network {
         configSocketEvents();
         elapsedTime = 0;
         playerUpdateData = new ArrayList<>();
+        roomId = -1;
     }
 
     public void update(float delta){
         elapsedTime += delta;
-
 
         if(elapsedTime >= NET_TIME_PER_TICK){
             tick();
@@ -125,8 +126,46 @@ public class Network {
         });
     }
 
+    public void joinRoom(int _roomId){
+
+
+        if(this.socket.connected()){
+            tryJoinRoom(roomId);
+        } else {
+            // wait until connection and then try to join the room
+            socket.on("socketID", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    tryJoinRoom(_roomId);
+                }
+            });
+
+        }
+
+
+    }
+
+    void tryJoinRoom(int _roomId){
+        Gdx.app.log("SocketIO", "Trying to join room!");
+        JSONObject joinRoomData = getJoinRoomData(_roomId);
+        socket.emit("joinRoom", joinRoomData).on("joinRoomSuccess", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("SocketIO", "Joining room id: " + _roomId + " success!");
+                roomId = _roomId;
+            }
+        }).on("joinFailure", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Gdx.app.log("SocketIO", "Joining room id: " + _roomId + " failure.");
+                roomId = -1;
+            }
+        });
+    }
+
     public void setData(JSONObject data){
         this.data = data;
+
     }
 
     public void putCallback(String eventId, Emitter.Listener callback){
@@ -151,5 +190,22 @@ public class Network {
 
     public float getElapsedTime() {
         return elapsedTime;
+    }
+
+    public int getRoomId(){
+        return this.roomId;
+    }
+
+    JSONObject getJoinRoomData(int roomId){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("roomId", roomId);
+            jsonObject.put("id", socket.id());
+            return jsonObject;
+        } catch (JSONException e){
+            Gdx.app.error("SocketIO", "Getting joinRoom data fail!");
+            e.printStackTrace();
+        }
+        return null;
     }
 }

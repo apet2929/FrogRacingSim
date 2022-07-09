@@ -70,7 +70,7 @@ public class Box2DTestState extends State {
     @Override
     public void update(float delta) {
         stage.act(delta);
-        if(!connected) return;
+        if(!this.isConnected()) return;
         updateFrogs();
         level.update(delta);
 
@@ -93,7 +93,7 @@ public class Box2DTestState extends State {
     public void draw(SpriteBatch sb) {
 
         ScreenUtils.clear(Color.BLACK);
-        if(!connected) return;
+        if(!this.isConnected()) return;
 
         viewport.apply();
 
@@ -204,6 +204,7 @@ public class Box2DTestState extends State {
 
     void initNetwork() {
         network = new Network();
+
         network.putCallback("socketID", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -287,9 +288,22 @@ public class Box2DTestState extends State {
         level.removeEntity(frog);
     }
 
-    JSONObject getGameData(){
+    void setRoom(int roomId){
+        network.joinRoom(roomId);
+    }
 
-        return frog.toJSON();
+    JSONObject getGameData(){
+        JSONObject data = frog.toJSON();
+        try {
+            data.put("roomId", network.getRoomId());
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    boolean isConnected(){
+        return this.connected && this.network.getRoomId() != -1;
     }
 
 

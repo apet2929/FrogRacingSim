@@ -3,16 +3,19 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "levels/level1.tmx",
     "expandedProjectPaths": [
+        "levels",
+        "metalui",
+        "."
     ],
     "fileStates": {
         "levels/level1.tmx": {
             "scale": 0.125,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 6084,
-                "y": 5956
+                "x": 3532,
+                "y": 5948
             }
         },
         "levels/test.tmx": {
@@ -42,13 +45,17 @@
     "map.renderOrder": null,
     "map.width": 20,
     "openFiles": [
+        "tiles.tsx",
+        "world-tiles.tsx",
+        "levels/level1.tmx",
+        "levels/test.tmx"
     ],
     "project": "levels.tiled-project",
     "recentFiles": [
-        "levels/level1.tmx",
-        "levels/test.tmx",
+        "tiles.tsx",
         "world-tiles.tsx",
-        "tiles.tsx"
+        "levels/test.tmx",
+        "levels/level1.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

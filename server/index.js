@@ -1,3 +1,4 @@
+const { get } = require("http");
 
 let app = require("express")();
 var server = require("http").Server(app);
@@ -5,6 +6,7 @@ var io = require("socket.io")(server, {
     allowEIO3: true
 });
 
+var activeRooms = [];
 var players = [];
 
 console.log(app);
@@ -22,37 +24,62 @@ server.on("connect_error", (err) => {
 io.on('connection', function(socket) {
     console.log("Player connected!" + socket.id);
     socket.emit('socketID', { id: socket.id });
-    socket.emit("getPlayers", players);
 
     let player = new Player(socket.id, null,null,null,null,null,null,null); 
     players.push(player);
 
-    socket.broadcast.emit("newPlayer", { id: socket.id });
     socket.on('disconnect', function() {
         console.log("Player disconnected!" + socket.id);
-        socket.broadcast.emit("playerDisconnected", { id: socket.id });
         for(var i = 0; i < players.length; i++){
             if(players[i].id === socket.id){
+                if(players[i].roomId != null) socket.to(players[i].roomId).emit("playerDisconnected", {id : socket.id});
                 players.splice(i, 1);
             }
         }
     });
 
+
     socket.on("tick", function(data) {
-        socket.broadcast.emit("tick", data);
+        socket.to(data.roomId).emit("tick", data);
         // console.log("Tick recieved! data = " + JSON.stringify(data, null, 4));
-        for(var i = 0; i < data.length; i++){
-            
-            if(players[i].id === data.id){
-                players[i].x = data.x;
-                players[i].y = data.y;
-                players[i].vx = data.vx;
-                players[i].vy = data.vy;
-                players[i].state = data.state;
-                players[i].animation = data.animation;
-                players[i].frame = data.frame;
-            }
+        
+        let player = getPlayer(data.id);  
+        if(player === null){
+            console.error("Error onTick! Player with ID: " + data.id + " not found!");
+            return;
+        } 
+        player.x = data.x;
+        player.y = data.y;
+        player.vx = data.vx;
+        player.vy = data.vy;
+        player.state = data.state;
+        player.animation = data.animation;
+        player.frame = data.frame;
+        
+    });
+
+    socket.on("joinRoom", data => {
+        let roomId = data.roomId;
+        let playerId = data.id;
+        if(!(roomId in activeRooms)){
+            activeRooms.push(roomId);
         }
+        let player = getPlayer(playerId);
+        if(player === null){
+            console.error("Error onJoinRoom! Player with ID: " + data.id + " not found!");
+            socket.emit("joinRoomFailure");
+            return;
+        } 
+        player.roomId = roomId;
+        socket.to(roomId).emit("newPlayer", { id : playerId });
+        socket.join(roomId);
+        socket.emit("joinRoomSuccess");
+        socket.emit("getPlayers", getPlayersInRoom(roomId)); 
+        console.log("Join room success!");
+
+    });
+    socket.on("leaveRoom", data => {
+
     });
 
     
@@ -60,9 +87,23 @@ io.on('connection', function(socket) {
 
 });
 
+function getPlayer(playerId){
+    for(var i = 0; i < players.length; i++){
+        if(players[i].id === playerId){
+            return players[i];
+        }
+    }
+    return null;
+}
+
+function getPlayersInRoom(roomId){
+    return players.filter(val => val.roomId === roomId);
+}
+
 class Player {
     constructor(id, x, y, vx, vy, state, animation, frame) {
         this.id = id;
+        this.roomId = -1;
         this.x = x;
         this.y = y;
         this.vx = vx;

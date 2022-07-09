@@ -2,6 +2,7 @@ package com.apet2929.game;
 
 import com.apet2929.game.engine.states.Box2DTestState;
 import com.apet2929.game.engine.states.GameStateManager;
+import com.apet2929.game.engine.states.RoomChoiceState;
 import com.apet2929.game.engine.states.TiledTestState;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -23,7 +24,7 @@ public class Game extends ApplicationAdapter {
 		gsm = new GameStateManager(new OrthographicCamera(), sb);
 		img = new Texture("badlogic.jpg");
 
-		gsm.push(new Box2DTestState(gsm));
+		gsm.push(new RoomChoiceState(gsm));
 
 	}
 
