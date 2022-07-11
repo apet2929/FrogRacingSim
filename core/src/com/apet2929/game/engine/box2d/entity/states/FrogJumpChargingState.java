@@ -1,5 +1,6 @@
 package com.apet2929.game.engine.box2d.entity.states;
 
+import com.apet2929.game.engine.box2d.entity.Direction;
 import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.SmartEntity;
 import com.badlogic.gdx.Gdx;
@@ -26,9 +27,9 @@ public class FrogJumpChargingState extends FrogState{
         super.onExit();
     }
 
-    public void jump(){
+    public void jump(Direction direction){
         float force_percent = clamp(getPercentCharged(), 0.3f, 1.0f);
-        FrogJumpingState.jump(frog, force_percent * JUMPING_FORCE);
+        FrogJumpingState.jump(frog, force_percent * JUMPING_FORCE, direction);
     }
 
     public float getPercentCharged(){

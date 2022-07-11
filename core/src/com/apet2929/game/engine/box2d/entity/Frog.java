@@ -84,15 +84,18 @@ public class Frog extends SmartEntity {
                 if(fA.getUserData().equals("foot" + id)){
                     frog = fA;
                     other = fB;
-                    numFootContacts--;
+
                 } else if(fB.getUserData().equals("foot" + id)){
                     frog = fB;
                     other = fA;
-                    numFootContacts--;
                 } else {
                     return;
                 }
                 otherID = (String) other.getBody().getFixtureList().get(0).getUserData();
+
+                if(!other.isSensor()){
+                    numFootContacts--;
+                }
                 if(otherID.equals("wall")){
                 }
             }
@@ -146,7 +149,7 @@ public class Frog extends SmartEntity {
         this.body = factory.makeRectBody(x, y, BODY_WIDTH, BODY_HEIGHT, Material.WOOD, BodyDef.BodyType.DynamicBody, true);
         this.body.getFixtureList().get(0).setUserData("frog" + id);
         PolygonShape footFixtureShape = new PolygonShape();
-        footFixtureShape.setAsBox(BODY_WIDTH/3f, BODY_HEIGHT/5, new Vector2(0, -BODY_HEIGHT/2f), 0);
+        footFixtureShape.setAsBox(BODY_WIDTH/2f, BODY_HEIGHT/5, new Vector2(0, -BODY_HEIGHT/2f), 0);
 
         Fixture footFixture = this.body.createFixture(footFixtureShape, 0.0f);
 

@@ -7,8 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
-import static com.apet2929.game.engine.Utils.WALKING_FORCE;
-
 public class FrogWalkingState extends FrogState{
     public FrogWalkingState(SmartEntity entity) {
         super(entity, Frog.WALKING);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,12 +26,28 @@ public class Utils {
     public static final float UNIT_SCALE = TILE_SIZE/417f;
 
 //    Forces
-    public static final float WALKING_FORCE = 12000 * WORLD_SCALE;
+
+    public static final float HOPPING_FORCE = 8000 * WORLD_SCALE;
     public static final float JUMPING_FORCE = 24000 * WORLD_SCALE;
     public static final float GRAPPLE_FORCE = 22000 * WORLD_SCALE;
     public static final float DRAG_FORCE = 600 * WORLD_SCALE;
+    public static final float AIR_CONTROL_FORCE = 1000 * WORLD_SCALE;
 
     public static final float MAX_GRAPPLE_LENGTH = TILE_SIZE * 10;
+
+    public static final float HOP_RIGHT_ANGLE = (float) Math.toRadians(75);
+    public static final float HOP_LEFT_ANGLE = (float ) Math.toRadians(105);
+    public static final float HOP_RIGHT_X = (float) Math.cos(HOP_RIGHT_ANGLE);
+    public static final float HOP_RIGHT_Y = (float) Math.sin(HOP_RIGHT_ANGLE);
+    public static final Vector2 HOP_RIGHT_VECTOR = new Vector2(HOP_RIGHT_X, HOP_RIGHT_Y);
+    public static final float HOP_LEFT_X = (float) Math.cos(HOP_LEFT_ANGLE);
+    public static final float HOP_LEFT_Y = (float) Math.sin(HOP_LEFT_ANGLE);
+    public static final Vector2 HOP_LEFT_VECTOR = new Vector2(HOP_LEFT_X, HOP_LEFT_Y);
+
+    public static final float HOP_SPEED_X = 3f;
+    public static final float HOP_SPEED_Y = 20f;
+
+
 
     public static final int[] WASD = new int[]{Input.Keys.W, Input.Keys.A, Input.Keys.S, Input.Keys.D};
 

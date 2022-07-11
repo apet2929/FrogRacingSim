@@ -8,8 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
-import static com.apet2929.game.engine.Utils.DRAG_FORCE;
-import static com.apet2929.game.engine.Utils.WALKING_FORCE;
+import static com.apet2929.game.engine.Utils.*;
 
 
 public class PlayerFrogJumpingState extends com.apet2929.game.engine.box2d.entity.states.FrogJumpingState {
@@ -20,13 +19,13 @@ public class PlayerFrogJumpingState extends com.apet2929.game.engine.box2d.entit
 
     @Override
     public void update(float delta) {
-        applyDragForce();
+
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            frog.applyForceToCenter(Direction.LEFT.getVector(), WALKING_FORCE /4f);
+            frog.applyForceToCenter(Direction.LEFT.getVector(), AIR_CONTROL_FORCE);
             frog.setDirection(Direction.LEFT);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            frog.applyForceToCenter(Direction.RIGHT.getVector(), WALKING_FORCE /4f);
+            frog.applyForceToCenter(Direction.RIGHT.getVector(), AIR_CONTROL_FORCE);
             frog.setDirection(Direction.RIGHT);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
@@ -35,19 +34,12 @@ public class PlayerFrogJumpingState extends com.apet2929.game.engine.box2d.entit
         if(Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_RIGHT)){
             frog.changeState(Frog.GRAPPLE);
         }
-
-        if(frog.getNumFootContacts() > 0){
-            if(frog.getBody().getLinearVelocity().y < 1) land();
-        }
+        super.update(delta);
     }
 
     @Override
     public void land(){
-        if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D)){
-            this.entity.changeState(Frog.WALKING);
-        } else {
-            this.entity.changeState(Frog.IDLE);
-        }
+        this.entity.changeState(Frog.IDLE);
     }
 
 

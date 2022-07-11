@@ -1,5 +1,6 @@
 package com.apet2929.game.engine.box2d.entity.states.player;
 
+import com.apet2929.game.engine.box2d.entity.Direction;
 import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.PlayerFrog;
 import com.apet2929.game.engine.box2d.entity.SmartEntity;
@@ -23,7 +24,17 @@ public class PlayerFrogJumpChargingState extends FrogJumpChargingState {
     public void update(float delta) {
         this.elapsedTime += delta;
         if(getPercentCharged() > 1 || !Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            if(frog.canJump()) jump();
+            if(frog.canJump()) {
+                if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                    System.out.println("Jumping right!");
+                    jump(Direction.RIGHT);
+                } else if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                    System.out.println("Jumping left!");
+                    jump(Direction.LEFT);
+                } else {
+                    jump(Direction.UP);
+                }
+            }
             elapsedTime = 0;
 
         }

@@ -57,8 +57,13 @@ public class FrogGrappleState extends FrogState{
         grapplePos = pos;
     }
 
-    public boolean canGrappleTo(String fixtureID){
-        return !fixtureID.contains("frog") && !fixtureID.contains("foot");
+    public boolean canGrappleTo(String fixtureID, Vector2 normal){
+        if(fixtureID.contains("frog") && fixtureID.contains("foot")) return false;
+        int angleDeg = Math.round(normal.angleDeg());
+        if(normal.y > 0.9 || normal.y < -0.9) { // hit the top or bottom of a body
+            return false;
+        }
+        return true;
     }
 
 

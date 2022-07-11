@@ -7,8 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 
-import static com.apet2929.game.engine.Utils.DRAG_FORCE;
-import static com.apet2929.game.engine.Utils.WALKING_FORCE;
+import static com.apet2929.game.engine.Utils.*;
 
 
 public class FrogJumpingState extends FrogState {
@@ -21,7 +20,9 @@ public class FrogJumpingState extends FrogState {
     public void update(float delta) {
         applyDragForce();
         if(frog.getNumFootContacts() > 0){
-            if(frog.getBody().getLinearVelocity().y < 1) land();
+            if(frog.getBody().getLinearVelocity().y < 1){
+                land();
+            }
         }
     }
 
@@ -46,11 +47,18 @@ public class FrogJumpingState extends FrogState {
         this.entity.changeState(Frog.IDLE);
     }
 
-    public static void jump(Frog frog, float force){
-//        System.out.println("Jumping!");
-        frog.applyImpulseToCenter(new Vector2(0, 1), force);
+    public static void jump(Frog frog, float force, Direction direction){
+        if(direction == Direction.RIGHT){
+            frog.applyImpulseToCenter(HOP_RIGHT_VECTOR, force);
+            frog.changeState(Frog.JUMPING);
+        } else if(direction == Direction.LEFT) {
+            frog.applyImpulseToCenter(HOP_LEFT_VECTOR, force);
+        } else if(direction == Direction.UP) {
+            frog.applyImpulseToCenter(Direction.UP.getVector(), force);
+        } else {
+            throw new IllegalArgumentException("Direction.DOWN used for jump in FrogJumpingState!");
+        }
         frog.changeState(Frog.JUMPING);
-
     }
 
 

@@ -19,7 +19,6 @@ public class PlayerFrog extends Frog{
     void initStates() {
         HashMap<String, StateGenerator> states = new HashMap<>();
         states.put(IDLE, () -> new PlayerFrogIdleState(this));
-        states.put(WALKING, () -> new PlayerFrogWalkingState(this));
         states.put(JUMPING, () -> new PlayerFrogJumpingState(this));
         states.put(JUMP_CHARGING, () -> new PlayerFrogJumpChargingState(this));
         states.put(GRAPPLE, () -> new PlayerFrogGrappleState(this));

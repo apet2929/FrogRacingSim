@@ -1,10 +1,13 @@
 package com.apet2929.game.engine.box2d.entity.states;
 
+import com.apet2929.game.engine.Utils;
 import com.apet2929.game.engine.box2d.entity.Direction;
 import com.apet2929.game.engine.box2d.entity.Frog;
 import com.apet2929.game.engine.box2d.entity.SmartEntity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
+import static com.apet2929.game.engine.Utils.JUMPING_FORCE;
 
 public class FrogIdleState extends FrogState{
     public FrogIdleState(SmartEntity entity) {
@@ -27,9 +30,5 @@ public class FrogIdleState extends FrogState{
     @Override
     public void onExit() {
 
-    }
-
-    public void walk(){
-        this.entity.changeState(Frog.WALKING);
     }
 }

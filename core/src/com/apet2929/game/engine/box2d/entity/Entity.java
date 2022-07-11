@@ -46,7 +46,7 @@ public abstract class Entity{
     }
 
     public void applyImpulseToCenter(Vector2 direction, float magnitude){
-        this.body.applyLinearImpulse(direction.scl(magnitude), this.getPosition(), true);
+        this.body.applyLinearImpulse(direction.cpy().scl(magnitude), this.getPosition(), true);
     }
 
     public void setUserData(String data){
