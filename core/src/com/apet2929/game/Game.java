@@ -44,6 +44,7 @@ public class Game extends ApplicationAdapter {
 		gsm.dispose();
 		AssetManager.getInstance().dispose();
 		Gdx.app.exit();
+		System.exit(0);
 	}
 
 	@Override

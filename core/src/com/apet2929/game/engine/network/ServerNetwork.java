@@ -1,15 +1,9 @@
-package com.apet2929.game.engine;
+package com.apet2929.game.engine.network;
 
-import com.apet2929.game.engine.states.GameStateManager;
-import com.apet2929.game.engine.states.MultiplayerTestState;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,8 +12,7 @@ import java.util.HashMap;
 
 import static com.apet2929.game.engine.Utils.NET_TIME_PER_TICK;
 
-public class Network {
-
+public class ServerNetwork extends Network {
     private Socket socket;
     private HashMap<String, JSONObject> connectedPlayers;
     private JSONObject data;
@@ -28,7 +21,7 @@ public class Network {
     private float elapsedTime;
     private int roomId;
 
-    public Network() {
+    public ServerNetwork() {
         connectedPlayers = new HashMap<>();
         connectSocket();
         configSocketEvents();
@@ -37,21 +30,14 @@ public class Network {
         roomId = -1;
     }
 
-    public void update(float delta){
-        elapsedTime += delta;
-
-        if(elapsedTime >= NET_TIME_PER_TICK){
-            tick();
-            elapsedTime = 0;
-        }
-    }
-
+    @Override
     public void tick(){
-        onTickRequested.run();
+        super.tick();
         socket.emit("tick", data);
     }
 
     public void dispose() {
+        disconnectSocket();
         socket.close();
     }
 
@@ -72,7 +58,7 @@ public class Network {
         }
     }
 
-    public void configSocketEvents(){
+    void configSocketEvents(){
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -127,10 +113,8 @@ public class Network {
     }
 
     public void joinRoom(int _roomId){
-
-
         if(this.socket.connected()){
-            tryJoinRoom(roomId);
+            tryJoinRoom(_roomId);
         } else {
             // wait until connection and then try to join the room
             socket.on("socketID", new Emitter.Listener() {
@@ -139,10 +123,7 @@ public class Network {
                     tryJoinRoom(_roomId);
                 }
             });
-
         }
-
-
     }
 
     void tryJoinRoom(int _roomId){
@@ -165,7 +146,6 @@ public class Network {
 
     public void setData(JSONObject data){
         this.data = data;
-
     }
 
     public void putCallback(String eventId, Emitter.Listener callback){
@@ -176,10 +156,6 @@ public class Network {
         return socket.id();
     }
 
-    public void setOnTickRequested(Runnable onTickRequested) {
-        this.onTickRequested = onTickRequested;
-    }
-
     public ArrayList<JSONObject> getPlayerUpdateData() {
         return playerUpdateData;
     }
@@ -188,6 +164,7 @@ public class Network {
         playerUpdateData.clear();
     }
 
+    @Override
     public float getElapsedTime() {
         return elapsedTime;
     }

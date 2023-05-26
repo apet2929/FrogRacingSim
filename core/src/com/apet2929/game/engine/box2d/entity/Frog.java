@@ -2,7 +2,6 @@ package com.apet2929.game.engine.box2d.entity;
 
 import com.apet2929.game.AssetManager;
 import com.apet2929.game.engine.Animation;
-import com.apet2929.game.engine.Network;
 import com.apet2929.game.engine.box2d.BodyFactory;
 import com.apet2929.game.engine.box2d.OnCollision;
 import com.apet2929.game.engine.box2d.entity.states.*;
@@ -10,8 +9,6 @@ import com.apet2929.game.engine.level.Level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -22,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 import static com.apet2929.game.engine.Utils.*;
 
