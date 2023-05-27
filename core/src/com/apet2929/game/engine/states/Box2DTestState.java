@@ -79,6 +79,7 @@ public class Box2DTestState extends State {
             System.out.println("frog.getNumFootContacts() = " + frog.getNumFootContacts());
             System.out.println(network.getElapsedTime());
             System.out.println("tiledMapCamera = " + tiledMapCamera.zoom);
+            System.out.println("frog.inputBuffer = " + frog.inputBuffer.toString());
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             gsm.pop();
