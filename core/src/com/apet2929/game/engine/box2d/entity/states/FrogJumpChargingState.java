@@ -9,7 +9,7 @@ import com.badlogic.gdx.Input;
 import static com.apet2929.game.engine.Utils.JUMPING_FORCE;
 import static com.apet2929.game.engine.Utils.clamp;
 
-public class FrogJumpChargingState extends FrogState{
+public class FrogJumpChargingState extends FrogState {
 
     public float elapsedTime;
     public static final float MAX_CHARGE = 1.0f;

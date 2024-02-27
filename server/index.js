@@ -19,7 +19,7 @@ server.listen(8081, function() {
 
 server.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
-  });
+});
 
 io.on('connection', function(socket) {
     console.log("Player connected!" + socket.id);

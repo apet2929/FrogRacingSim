@@ -34,6 +34,7 @@ public class RoomChoiceState extends State{
     }
 
     void joinRoom(int roomId){
+        System.out.println("yee");
         Box2DTestState state = new Box2DTestState(gsm);
         state.setRoom(roomId);
         gsm.push(state);
