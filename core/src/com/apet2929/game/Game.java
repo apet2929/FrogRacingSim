@@ -24,7 +24,8 @@ public class Game extends ApplicationAdapter {
 		gsm = new GameStateManager(new OrthographicCamera(), sb);
 		img = new Texture("badlogic.jpg");
 
-		gsm.push(new RoomChoiceState(gsm));
+//		gsm.push(new RoomChoiceState(gsm));
+		gsm.push(new Box2DTestState(gsm));
 
 	}
 

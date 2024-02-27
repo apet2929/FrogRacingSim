@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Utils {
+    public static final boolean NETORK_ENABLED = false;
 
     public static final float NET_TICKS_PER_SECOND = 30;
     public static final float NET_TIME_PER_TICK = 1 / NET_TICKS_PER_SECOND;

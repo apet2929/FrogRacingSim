@@ -59,7 +59,7 @@ public class Box2DTestState extends State {
     public Box2DTestState(GameStateManager gsm) {
         super(gsm);
         initWorld();
-        initNetwork();
+        if(NETORK_ENABLED) initNetwork();
         initViewport();
         initUI();
         sr = new ShapeRenderer();
@@ -67,17 +67,19 @@ public class Box2DTestState extends State {
         tmr = new OrthogonalTiledMapRenderer(level.getMap(), UNIT_SCALE);
     }
 
+//    TODO: Fix what happens when Frog hits a wall (slam vs slide, walljump?)
+//    TODO: Add normalmaps & lighting
+//    TODO: Fix levels (stop using Tiled)
     @Override
     public void update(float delta) {
         stage.act(delta);
-        if(!this.isConnected()) return;
+        if(NETORK_ENABLED && !this.isConnected()) return;
         updateFrogs();
         level.update(delta);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             System.out.println("frog.canJump() = " + frog.canJump());
             System.out.println("frog.getNumFootContacts() = " + frog.getNumFootContacts());
-            System.out.println(network.getElapsedTime());
             System.out.println("tiledMapCamera = " + tiledMapCamera.zoom);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
@@ -86,14 +88,14 @@ public class Box2DTestState extends State {
         }
 
         updateCamera();
-        network.update(delta);
+        if(NETORK_ENABLED) network.update(delta);
     }
 
     @Override
     public void draw(SpriteBatch sb) {
 
         ScreenUtils.clear(Color.BLACK);
-        if(!this.isConnected()) return;
+        if(NETORK_ENABLED && !this.isConnected()) return;
 
         viewport.apply();
 
@@ -139,7 +141,7 @@ public class Box2DTestState extends State {
 
     @Override
     public void dispose() {
-        network.dispose();
+        if(NETORK_ENABLED) network.dispose();
         sr.dispose();
         stage.dispose();
     }
@@ -266,6 +268,7 @@ public class Box2DTestState extends State {
     }
 
     void updateFrogs(){
+        if(!NETORK_ENABLED) return;
         ArrayList<JSONObject> playerData = network.getPlayerUpdateData();
         for (JSONObject playerDatum : playerData) {
             updateFrog(playerDatum);
